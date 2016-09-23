@@ -1,4 +1,4 @@
-package org.jep.easycsvmap;
+package de.jep.easycsvmap;
 
 public class CSVContext {
 

@@ -1,4 +1,4 @@
-package org.jep.easycsvmap;
+package de.jep.easycsvmap;
 
 import java.io.FileWriter;
 import java.io.IOException;

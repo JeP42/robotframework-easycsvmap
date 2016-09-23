@@ -1,9 +1,10 @@
-package org.jep.easycsvmap.robotframework;
+package de.jep.easycsvmap.robotframework;
 
-import org.jep.easycsvmap.EasyCSVMap;
 import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywords;
+
+import de.jep.easycsvmap.EasyCSVMap;
 
 @RobotKeywords
 public class RobotEasyCsv {
