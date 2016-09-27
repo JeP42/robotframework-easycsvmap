@@ -26,13 +26,31 @@ public class EasyCSVMap {
 
     /**
      * Creates EasyCSVMap object.
-     * By specifying a header line via its line index, it is possible to access columns by its column name.
+     * By specifying a header line via its line index, it is possible to access columns of the CSV format by its column name.
      *
      * @param headerLineIndex An arbitrary line in the CSV can be used as header line.
      */
     public EasyCSVMap(int headerLineIndex) {
+        this(new CSVContext(headerLineIndex));
+    }
+
+    /**
+     * Creates EasyCSVMap object.
+     * This constructor is appropriate if the CSV format does only contain data lines but not a header line. If a header line exists in the CSV format use
+     * {@link EasyCSVMap#EasyCSVMap(int)} to construct the EasyCSVMap object.
+     */
+    public EasyCSVMap() {
+        this(new CSVContext(CSVContext.NO_HEADER_INDEX));
+    }
+
+    /**
+     * Creates EasyCSVMap object.
+     * This constructor allows custom format settings via CSVContext instance
+     *
+     */
+    public EasyCSVMap(CSVContext csvContext) {
         super();
-        this.csvContext = new CSVContext(headerLineIndex);
+        this.csvContext = csvContext;
     }
 
     /**
@@ -237,6 +255,14 @@ public class EasyCSVMap {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public int getNumberOfCSVLines() {
+        return this.csvMap.size();
+    }
+
+    public int getNumberOfCSVColumns() {
+        return this.headerLine.size();
     }
 
 }

@@ -25,7 +25,7 @@ public class CSVContext {
     }
 
     public void setHeaderLine(int headerLineIndex) {
-        this.headerLineIndex = headerLineIndex;
+        this.headerLineIndex = headerLineIndex > NO_HEADER_INDEX ? headerLineIndex : NO_HEADER_INDEX;
     }
 
     public char getColumnSeparator() {
