@@ -177,22 +177,29 @@ public class EasyCSVMap {
 
     /**
      * Convenient method to retrieve the value of a particular element from the CSV structure. This element can be selected via a selector expression.
-     * The syntax of the selector expression is <b>&lt;lineIndex&gt;.&lt;columnName&gt;|&lt;columnIndex&gt;</b> Examples:
+     * The syntax of the selector expression is <b>&lt;lineSpecification&gt;.&lt;columnName&gt;|&lt;columnIndex&gt;</b> Examples:
      * <li><b>2.name</b> => if a header line was specified then the columns can be access via its name. Hence, this expression would find the value of column 'name' of the third
-     * line in the CSV.</li>
+     * line in the CSV (numeric line specification indicates a line index).</li>
      * <li><b>2.10</b> => if no header line was explicitly specified then the columns have to be accessed via index. Hence, this expression would find the value of the eleventh
      * column of the third line in the CSV.</li>
      * <p>
-     * *
+     * Beside simply using numeric line specifications it is also possible to use more complex ones, e.g. search line via comparing column values with regular expressions
+     * <li><b>[name=^Foo.*$].name</b> => Would find the line in which column 'name' has a value matching the given regular expression.
+     *
      *
      * @param csvPath
      * @return
      */
+    @Deprecated
     public String getValue(String csvSelector) {
-        String[] split = csvSelector.split("\\.");
-        int lineIndex = Integer.valueOf(split[0]);
-        String column = split[1];
-        return this.csvMap.get(lineIndex).get(column);
+        Map<Integer, String> values = this.getValues(csvSelector);
+        return values.values().iterator().next();
+    }
+
+    public Map<Integer, String> getValues(String csvSelectorString) {
+        CSVSelector csvSelector = CSVSelectorFactory.getCSVSelector(csvSelectorString, this.csvMap, this.csvContext);
+
+        return csvSelector.getValues();
     }
 
     /**
@@ -203,15 +210,10 @@ public class EasyCSVMap {
      * @param csvPath
      * @return
      */
-    public void setValue(String csvSelector, String value) {
-        String[] split = csvSelector.split("\\.");
-        int lineIndex = Integer.valueOf(split[0]);
-        if (lineIndex == this.csvContext.getHeaderLineIndex()) {
-            throw new RuntimeException("It is not allowed to change values of the header line (line index " + lineIndex + ")");
-        }
+    public void setValues(String csvSelectorString, String value) {
+        CSVSelector csvSelector = CSVSelectorFactory.getCSVSelector(csvSelectorString, this.csvMap, this.csvContext);
 
-        String column = split[1];
-        this.csvMap.get(lineIndex).put(column, value);
+        csvSelector.setValues(value);
     }
 
     /**

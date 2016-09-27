@@ -23,7 +23,7 @@ public class RobotEasyCsv {
     @RobotKeyword("Set Csv Value")
     @ArgumentNames({ "csvSelector", "value" })
     public void setCsvValue(String csvSelector, String value) {
-        this.easyCsvMap.setValue(csvSelector, value);
+        this.easyCsvMap.setValues(csvSelector, value);
     }
 
     @RobotKeyword("Get Csv Value")
