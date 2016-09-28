@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+
 
 public class RegExpLineSelector implements CSVSelector {
 
@@ -58,38 +60,45 @@ public class RegExpLineSelector implements CSVSelector {
     }
 
     private void parse(String selector) throws InvalidSelectorException {
-        int guessedSeparator = this.selector.lastIndexOf('.');
-        String[] selectorFragments = new String[] { this.selector.substring(0, guessedSeparator), this.selector.substring(guessedSeparator + 1) };
+        this.validateFormat();
 
-        this.validateFormat(selectorFragments);
+        int guessedSeparatorIdx = this.selector.lastIndexOf('.');
+        String[] selectorFragments = new String[] { this.selector.substring(0, guessedSeparatorIdx), this.selector.substring(guessedSeparatorIdx + 1) };
+
         this.validateLineSpec(selectorFragments[0]);
         this.validateColumnSpec(selectorFragments[1]);
 
-        // this.lineIndex = Integer.valueOf(selectorFragments[0]);
         this.columnSpec = selectorFragments[1];
         this.columnIdentifier = this.getColumnIdentifier(selectorFragments[0]);
         this.columnRegExp = this.getColumnRegExpPattern(selectorFragments[0]);
     }
 
+    private void validateFormat() throws InvalidSelectorException {
+        int guessedSeparatorIdx = this.selector.lastIndexOf('.');
+        if (guessedSeparatorIdx == -1) {
+            throw new InvalidSelectorException("The given format " + this.selector + " does not match the expected format.");
+        }
+    }
+
     private Pattern getColumnRegExpPattern(String lineSpec) {
-        String[] lineSpecFragments = lineSpec.substring(1, lineSpec.length() - 1).split("=", 2);
+        String[] lineSpecFragments = CSVMapUtil.removeBracesFromString(lineSpec).split("=", 2);
         return Pattern.compile(lineSpecFragments[1]);
     }
 
     private String getColumnIdentifier(String lineSpec) {
-        String[] lineSpecFragments = lineSpec.substring(1, lineSpec.length() - 1).split("=", 2);
+        String[] lineSpecFragments = CSVMapUtil.removeBracesFromString(lineSpec).split("=", 2);
         return lineSpecFragments[0];
     }
 
     /*
-     * format of a valid line spec is key=value where the value is a regular expression
+     * format of a valid line spec is [key=value] where the value is a regular expression
      */
     private void validateLineSpec(String lineSpec) throws InvalidSelectorException {
         if (!lineSpec.startsWith("[") || !lineSpec.endsWith("]")) {
             throw new InvalidSelectorException("Invalid format of the given line specification as part of " + this.selector);
         }
 
-        String[] lineSpecFragments = this.selector.substring(1, this.selector.length() - 1).split("=", 2);
+        String[] lineSpecFragments = CSVMapUtil.removeBracesFromString(lineSpec).split("=", 2);
         if (lineSpecFragments.length != 2) {
             throw new InvalidSelectorException("Invalid format of the given line specification as part of " + this.selector);
         }
@@ -109,13 +118,10 @@ public class RegExpLineSelector implements CSVSelector {
         }
     }
 
-    private void validateFormat(String[] selectorFragments) throws InvalidSelectorException {
-        if (selectorFragments.length != 2) {
-            throw new InvalidSelectorException("The given format " + this.selector + " does not match the expected format.");
-        }
-    }
+
 
     @Override
+    @Nonnull
     public Map<Integer, String> getValues() {
         Map<Integer, String> result = new ConcurrentHashMap<>();
 

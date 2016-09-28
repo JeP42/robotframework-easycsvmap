@@ -4,11 +4,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Nonnull;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
@@ -87,16 +91,34 @@ public class EasyCSVMap {
 
             while ((nextLine = reader.readNext()) != null) {
                 if (this.processHeaderLine(nextLine, lineIndex++)) {
-                    return;
+
+                    break;
                 }
             }
 
-            throw new RuntimeException("Failed to find the header line. Please check the specified header line index, maybe it does not exist in the given CSV format...");
+            this.validateHeaderLine();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
             this.closeCSVReader(reader);
         }
+    }
+
+    private void validateHeaderLine() {
+        // check if headerline exists...
+        if (this.headerLine == null) {
+            throw new RuntimeException("Failed to find the header line. Please check the specified header line index, maybe it does not exist in the given CSV format...");
+        }
+
+        // check for duplicate header columns:
+        if (this.headerLineContainsDuplicates()) {
+            throw new RuntimeException("The given header line is invalid as it contains duplicate colum names");
+        }
+    }
+
+    private boolean headerLineContainsDuplicates() {
+        Set<String> colSet = new HashSet<String>(this.headerLine);
+        return this.headerLine.size() != colSet.size();
     }
 
     private CSVReader getReader(String csvString) {
@@ -176,26 +198,23 @@ public class EasyCSVMap {
     }
 
     /**
-     * Convenient method to retrieve the value of a particular element from the CSV structure. This element can be selected via a selector expression.
+     * Convenient method to retrieve the value of particular cells from the CSV structure. These cells can be selected via a selector expression.
      * The syntax of the selector expression is <b>&lt;lineSpecification&gt;.&lt;columnName&gt;|&lt;columnIndex&gt;</b> Examples:
      * <li><b>2.name</b> => if a header line was specified then the columns can be access via its name. Hence, this expression would find the value of column 'name' of the third
      * line in the CSV (numeric line specification indicates a line index).</li>
      * <li><b>2.10</b> => if no header line was explicitly specified then the columns have to be accessed via index. Hence, this expression would find the value of the eleventh
      * column of the third line in the CSV.</li>
      * <p>
-     * Beside simply using numeric line specifications it is also possible to use more complex ones, e.g. search line via comparing column values with regular expressions
-     * <li><b>[name=^Foo.*$].name</b> => Would find the line in which column 'name' has a value matching the given regular expression.
-     *
+     * Beside simply using numeric line specifications it is also possible to use more complex ones, e.g. search a line via comparing column values with regular expressions.
+     * Example:
+     * <li><b>[name=^Foo.*$].name</b> => Would find all lines in which column 'name' has a value matching the given regular expression.
+     * <p>
+     * When using regular expressions as line specification it is possible that it matches more than just one line. hence, the method may return more then just one value.
      *
      * @param csvPath
-     * @return
+     * @return Map where the line index is used as Map-key and the cells value as Map-value
      */
-    @Deprecated
-    public String getValue(String csvSelector) {
-        Map<Integer, String> values = this.getValues(csvSelector);
-        return values.values().iterator().next();
-    }
-
+    @Nonnull
     public Map<Integer, String> getValues(String csvSelectorString) {
         CSVSelector csvSelector = CSVSelectorFactory.getCSVSelector(csvSelectorString, this.csvMap, this.csvContext);
 
@@ -203,8 +222,8 @@ public class EasyCSVMap {
     }
 
     /**
-     * Convenient method to set the value of a particular element from the CSV structure. This element can be selected via a selector expression, see
-     * {@link EasyCSVMap#getValue(String)}
+     * Convenient method to set the values of particular cells in the CSV structure. These cells can be selected via a selector expression, see
+     * {@link EasyCSVMap#getValue(String)}. The given value is set for all cells matching the given selector expressions.
      * If a header line was specified the corresponding line is read-only. An exception is thrown when trying the change a value of the header line.
      *
      * @param csvPath

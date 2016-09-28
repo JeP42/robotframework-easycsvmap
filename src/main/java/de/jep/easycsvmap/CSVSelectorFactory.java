@@ -20,7 +20,6 @@ public final class CSVSelectorFactory {
         }
 
 
-
         throw new RuntimeException("The given CSV selector " + csvSelector + " is not supported.");
     }
 

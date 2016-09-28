@@ -19,9 +19,9 @@ public class EasyCSVMapTest {
         csvMap.parseCsvFromFile(csvFilePath);
 
         // expect a standard header with indexes to be available ==> access columns via index
-        assertEquals("datacol0-line0", csvMap.getValue("0.0"));
-        assertEquals("datacol1-line0", csvMap.getValue("0.1"));
-        assertEquals("datacol2-line0", csvMap.getValue("0.2"));
+        assertEquals("datacol0-line0", csvMap.getValues("{0}.0").values().iterator().next());
+        assertEquals("datacol1-line0", csvMap.getValues("{0}.1").values().iterator().next());
+        assertEquals("datacol2-line0", csvMap.getValues("{0}.2").values().iterator().next());
     }
 
     @Test
@@ -36,9 +36,9 @@ public class EasyCSVMapTest {
         csvMap.parseCsvFromFile(csvFilePath);
 
         // expect a standard header with indexes to be available ==> access columns via index
-        assertEquals("datacol0-line0", csvMap.getValue("0.0"));
-        assertEquals("datacol1-line0", csvMap.getValue("0.1"));
-        assertEquals("datacol2-line0", csvMap.getValue("0.2"));
+        assertEquals("datacol0-line0", csvMap.getValues("{0}.0").values().iterator().next());
+        assertEquals("datacol1-line0", csvMap.getValues("{0}.1").values().iterator().next());
+        assertEquals("datacol2-line0", csvMap.getValues("{0}.2").values().iterator().next());
     }
 
     @Test
@@ -50,9 +50,9 @@ public class EasyCSVMapTest {
         csvMap.parseCsvFromFile(csvFilePath);
 
         // expect a standard header with indexes to be available ==> access columns via index
-        assertEquals("a;a", csvMap.getValue("1.Col0-Header"));
-        assertEquals("b;b", csvMap.getValue("1.Col1-Header"));
-        assertEquals("c;c", csvMap.getValue("1.Col2-Header"));
+        assertEquals("a;a", csvMap.getValues("{1}.Col0-Header").values().iterator().next());
+        assertEquals("b;b", csvMap.getValues("{1}.Col1-Header").values().iterator().next());
+        assertEquals("c;c", csvMap.getValues("{1}.Col2-Header").values().iterator().next());
     }
 
     @Test
@@ -68,9 +68,9 @@ public class EasyCSVMapTest {
         csvMap.parseCsvFromFile(csvFilePath);
 
         // expect a standard header with indexes to be available ==> access columns via index
-        assertEquals("a;a", csvMap.getValue("1.Col0-Header"));
-        assertEquals("b;b", csvMap.getValue("1.Col1-Header"));
-        assertEquals("c;c", csvMap.getValue("1.Col2-Header"));
+        assertEquals("a;a", csvMap.getValues("{1}.Col0-Header").values().iterator().next());
+        assertEquals("b;b", csvMap.getValues("{1}.Col1-Header").values().iterator().next());
+        assertEquals("c;c", csvMap.getValues("{1}.Col2-Header").values().iterator().next());
     }
 
     @Test
@@ -83,12 +83,12 @@ public class EasyCSVMapTest {
         csvMap.parseCsvFromFile(csvFilePath);
 
         // expect a header with column names to be available ==> access columns via name
-        assertEquals("datacol0-line0", csvMap.getValue("1.Col0-Header"));
-        assertEquals("datacol1-line0", csvMap.getValue("1.Col1-Header"));
-        assertEquals("datacol2-line0", csvMap.getValue("1.Col2-Header"));
+        assertEquals("datacol0-line0", csvMap.getValues("{1}.Col0-Header").values().iterator().next());
+        assertEquals("datacol1-line0", csvMap.getValues("{1}.Col1-Header").values().iterator().next());
+        assertEquals("datacol2-line0", csvMap.getValues("{1}.Col2-Header").values().iterator().next());
 
         // be aware the the header line is also part of the internal representation of the CSV so this has to considered in the index
-        assertEquals("Col0-Header", csvMap.getValue("0.Col0-Header"));
+        assertEquals("Col0-Header", csvMap.getValues("{0}.Col0-Header").values().iterator().next());
     }
 
     @Test(expected = RuntimeException.class)
@@ -96,6 +96,15 @@ public class EasyCSVMapTest {
 
         EasyCSVMap csvMap = new EasyCSVMap(42);
         String csvFilePath = ClassLoader.getSystemResource("de/jep/easycsvmap/header-0-five-lines.csv").getFile();
+
+        csvMap.parseCsvFromFile(csvFilePath);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void parseCsv_headerLineContainsDuplicates() throws Exception {
+
+        EasyCSVMap csvMap = new EasyCSVMap(0);
+        String csvFilePath = ClassLoader.getSystemResource("de/jep/easycsvmap/header-0-with-duplicates.csv").getFile();
 
         csvMap.parseCsvFromFile(csvFilePath);
     }
@@ -143,8 +152,8 @@ public class EasyCSVMapTest {
         String csvFilePath = ClassLoader.getSystemResource("de/jep/easycsvmap/header-0-five-lines.csv").getFile();
         csvMap.parseCsvFromFile(csvFilePath);
         for (int i = 0; i < 3; i++) {
-            csvMap.setValues("1.Col" + i + "-Header", "4711-" + i);
-            csvMap.setValues("5.Col" + i + "-Header", "0815-" + i);
+            csvMap.setValues("{1}.Col" + i + "-Header", "4711-" + i);
+            csvMap.setValues("{5}.Col" + i + "-Header", "0815-" + i);
         }
 
         String tempFilePath = this.createTempFile();
@@ -154,8 +163,8 @@ public class EasyCSVMapTest {
             csvMap = new EasyCSVMap(0);
             csvMap.parseCsvFromFile(tempFilePath);
             for (int i = 0; i < 3; i++) {
-                assertEquals("4711-" + i, csvMap.getValue("1.Col" + i + "-Header"));
-                assertEquals("0815-" + i, csvMap.getValue("5.Col" + i + "-Header"));
+                assertEquals("4711-" + i, csvMap.getValues("{1}.Col" + i + "-Header").values().iterator().next());
+                assertEquals("0815-" + i, csvMap.getValues("{5}.Col" + i + "-Header").values().iterator().next());
             }
         } finally {
             this.deleteTempFile(tempFilePath);

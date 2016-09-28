@@ -8,6 +8,83 @@ import static org.junit.Assert.assertEquals;
 
 public class EasyCSVMapwithRegExpLineSelectorTest {
 
+    @Test(expected = RuntimeException.class)
+    public void validation_invalidFormat() {
+        // line with index=0 is the header line
+        EasyCSVMap csvMap = new EasyCSVMap(0);
+        String csvFilePath = ClassLoader.getSystemResource("de/jep/easycsvmap/header-0-five-lines.csv").getFile();
+
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        csvMap.getValues("[1]");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void validation_invalidFormat1() {
+        // line with index=0 is the header line
+        EasyCSVMap csvMap = new EasyCSVMap(0);
+        String csvFilePath = ClassLoader.getSystemResource("de/jep/easycsvmap/header-0-five-lines.csv").getFile();
+
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        csvMap.getValues("Col0-Header=^datacol0-line.*$].Col1-Header");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void validation_invalidFormat2() {
+        // line with index=0 is the header line
+        EasyCSVMap csvMap = new EasyCSVMap(0);
+        String csvFilePath = ClassLoader.getSystemResource("de/jep/easycsvmap/header-0-five-lines.csv").getFile();
+
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        csvMap.getValues("[Col0-Header=^datacol0-line.*$.Col1-Header");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void validation_invalidLineSpecMissingEqual() {
+        // line with index=0 is the header line
+        EasyCSVMap csvMap = new EasyCSVMap(0);
+        String csvFilePath = ClassLoader.getSystemResource("de/jep/easycsvmap/header-0-five-lines.csv").getFile();
+
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        csvMap.getValues("[Col0-Header^aaa$].Col1-Header");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void validation_invalidLineSpecMissingCol() {
+        // line with index=0 is the header line
+        EasyCSVMap csvMap = new EasyCSVMap(0);
+        String csvFilePath = ClassLoader.getSystemResource("de/jep/easycsvmap/header-0-five-lines.csv").getFile();
+
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        csvMap.getValues("[=^aaa$].Col1-Header");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void validation_invalidLineSpecMissingRegExp() {
+        // line with index=0 is the header line
+        EasyCSVMap csvMap = new EasyCSVMap(0);
+        String csvFilePath = ClassLoader.getSystemResource("de/jep/easycsvmap/header-0-five-lines.csv").getFile();
+
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        csvMap.getValues("[Col0-Header=].Col1-Header");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void validation_invalidColSpec() {
+        // line with index=0 is the header line
+        EasyCSVMap csvMap = new EasyCSVMap(0);
+        String csvFilePath = ClassLoader.getSystemResource("de/jep/easycsvmap/header-0-five-lines.csv").getFile();
+
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        csvMap.getValues("[Col0-Header=1.*$].");
+    }
+
     @Test
     public void getValue_viaColName() {
         // line with index=0 is the header line
