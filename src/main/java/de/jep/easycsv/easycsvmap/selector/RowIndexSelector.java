@@ -11,7 +11,7 @@ import de.jep.easycsv.easycsvmap.core.InvalidSelectorFormatException;
 import de.jep.easycsv.easycsvmap.util.CSVMapUtil;
 
 
-public class LineIndexSelector implements CSVSelector {
+public class RowIndexSelector implements CSVSelector {
 
     private static final char FORMAT_SEPARATOR_CHARACTER = '.';
 
@@ -23,14 +23,14 @@ public class LineIndexSelector implements CSVSelector {
 
     private CSVContext csvContext;
 
-    private List<Integer> selectedLineIndexList;
+    private List<Integer> selectedRowIndexList;
 
-    private boolean allLineIndexes;
+    private boolean allRowIndexes;
 
     private String columnSpec;
 
 
-    public LineIndexSelector(String selector, List<Map<String, String>> csvMap, CSVContext csvContext) {
+    public RowIndexSelector(String selector, List<Map<String, String>> csvMap, CSVContext csvContext) {
         this.selector = selector;
         this.csvMap = csvMap;
         this.csvContext = csvContext;
@@ -70,13 +70,13 @@ public class LineIndexSelector implements CSVSelector {
         this.validateFormat();
 
         String[] selectorFragments = this.getSelectorFragments();
-        new LineIndexFormatValidator(selectorFragments[0]).validate();
+        new RowIndexFormatValidator(selectorFragments[0]).validate();
         new ColumnSpecFormatValidator(selectorFragments[1]).validate();
 
-        // first part of the selector is the line specification
-        String[] lineSpec = CSVMapUtil.removeBracesFromString(selectorFragments[0]).split(",");
-        this.allLineIndexes = (lineSpec.length == 1 && ALL_INDEXES_WILCARD_CHARACTER.equals(lineSpec[0]));
-        this.selectedLineIndexList = this.getLineIndexListFromStringArray(lineSpec);
+        // first part of the selector is the row specification
+        String[] rowSpec = CSVMapUtil.removeBracesFromString(selectorFragments[0]).split(",");
+        this.allRowIndexes = (rowSpec.length == 1 && ALL_INDEXES_WILCARD_CHARACTER.equals(rowSpec[0]));
+        this.selectedRowIndexList = this.getRowIndexListFromStringArray(rowSpec);
 
         // second part of the selector is the column specification
         this.columnSpec = selectorFragments[1];
@@ -97,9 +97,9 @@ public class LineIndexSelector implements CSVSelector {
         return new String[] { this.selector.substring(0, guessedSeparatorIdx), this.selector.substring(guessedSeparatorIdx + 1) };
     }
 
-    private List<Integer> getLineIndexListFromStringArray(String[] lineSpec) {
+    private List<Integer> getRowIndexListFromStringArray(String[] rowSpec) {
         List<Integer> indexList = new ArrayList<>();
-        for (String idx : lineSpec) {
+        for (String idx : rowSpec) {
             if (!idx.equals(ALL_INDEXES_WILCARD_CHARACTER)) {
                 indexList.add(Integer.parseInt(idx));
             }
@@ -111,43 +111,43 @@ public class LineIndexSelector implements CSVSelector {
     @Override
     public Map<Integer, String> getValues() {
         Map<Integer, String> result = new ConcurrentHashMap<>();
-        int lineIndex = 0;
+        int rowIndex = 0;
         for (Iterator<Map<String, String>> iter = this.csvMap.iterator(); iter.hasNext();) {
             Map<String, String> row = iter.next();
-            if (this.isLineSelected(lineIndex)) {
-                result.put(lineIndex, row.get(this.columnSpec));
+            if (this.isRowSelected(rowIndex)) {
+                result.put(rowIndex, row.get(this.columnSpec));
             }
-            lineIndex++;
+            rowIndex++;
         }
 
         return result;
     }
 
-    private boolean isLineSelected(int lineIndex) {
-        return this.allLineIndexes || this.selectedLineIndexList.contains(lineIndex);
+    private boolean isRowSelected(int rowIndex) {
+        return this.allRowIndexes || this.selectedRowIndexList.contains(rowIndex);
     }
 
     @Override
     public int setValues(String value) {
-        int affectedLines = 0;
-        int lineIndex = 0;
+        int affectedRows = 0;
+        int rowsIndex = 0;
         for (Iterator<Map<String, String>> iter = this.csvMap.iterator(); iter.hasNext();) {
             Map<String, String> row = iter.next();
-            if (this.isLineSelected(lineIndex)) {
-                this.validateWriteOperation(lineIndex);
+            if (this.isRowSelected(rowsIndex)) {
+                this.validateWriteOperation(rowsIndex);
                 row.put(this.columnSpec, value);
-                affectedLines++;
+                affectedRows++;
             }
-            lineIndex++;
+            rowsIndex++;
         }
-        return affectedLines;
+        return affectedRows;
     }
 
 
 
-    private void validateWriteOperation(int lineIndex) {
-        if (lineIndex == this.csvContext.getHeaderLineIndex()) {
-            throw new RuntimeException("It is not allowed to change values of the header line (line index " + lineIndex + ")");
+    private void validateWriteOperation(int rowsIndex) {
+        if (rowsIndex == this.csvContext.getHeaderRowIndex()) {
+            throw new RuntimeException("It is not allowed to change values of the header row (row index " + rowsIndex + ")");
         }
     }
 

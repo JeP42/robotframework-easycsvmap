@@ -11,8 +11,8 @@ public class ColumnSpecFormatValidator {
     }
 
     /**
-     * A valid column specification is a string with column name. The column name is either the column name from the given header line or the
-     * column index for the case that no header line was specified.
+     * A valid column specification is a string with column name. The column name is either the column name from the given header row or the
+     * column index for the case that no header row was specified.
      *
      * @throws InvalidSelectorFormatException
      */

@@ -13,7 +13,7 @@ import de.jep.easycsv.easycsvmap.core.InvalidSelectorFormatException;
 import de.jep.easycsv.easycsvmap.util.CSVMapUtil;
 
 
-public class RegExpLineSelector implements CSVSelector {
+public class RegExpRowSelector implements CSVSelector {
 
     private static final char FORMAT_SEPARATOR_CHARACTER = '.';
 
@@ -30,7 +30,7 @@ public class RegExpLineSelector implements CSVSelector {
     private Pattern columnRegExp;
 
 
-    public RegExpLineSelector(String selector, List<Map<String, String>> csvMap, CSVContext csvContext) {
+    public RegExpRowSelector(String selector, List<Map<String, String>> csvMap, CSVContext csvContext) {
         this.selector = selector;
         this.csvMap = csvMap;
         this.csvContext = csvContext;
@@ -71,7 +71,7 @@ public class RegExpLineSelector implements CSVSelector {
 
         String[] selectorFragments = this.getSelectorFragments();
 
-        new RegExpLineValidator(selectorFragments[0]).validate();
+        new RegExpRowValidator(selectorFragments[0]).validate();
         new ColumnSpecFormatValidator(selectorFragments[1]).validate();
 
         this.columnSpec = selectorFragments[1];
@@ -91,14 +91,14 @@ public class RegExpLineSelector implements CSVSelector {
         }
     }
 
-    private Pattern getColumnRegExpPattern(String lineSpec) {
-        String[] lineSpecFragments = CSVMapUtil.removeBracesFromString(lineSpec).split("=", 2);
-        return Pattern.compile(lineSpecFragments[1]);
+    private Pattern getColumnRegExpPattern(String rowSpec) {
+        String[] rowSpecFragments = CSVMapUtil.removeBracesFromString(rowSpec).split("=", 2);
+        return Pattern.compile(rowSpecFragments[1]);
     }
 
-    private String getColumnIdentifier(String lineSpec) {
-        String[] lineSpecFragments = CSVMapUtil.removeBracesFromString(lineSpec).split("=", 2);
-        return lineSpecFragments[0];
+    private String getColumnIdentifier(String rowSpec) {
+        String[] rowSpecFragments = CSVMapUtil.removeBracesFromString(rowSpec).split("=", 2);
+        return rowSpecFragments[0];
     }
 
 
@@ -107,14 +107,14 @@ public class RegExpLineSelector implements CSVSelector {
     public Map<Integer, String> getValues() {
         Map<Integer, String> result = new ConcurrentHashMap<>();
 
-        int lineIndex = 0;
+        int rowIndex = 0;
         for (Iterator<Map<String, String>> iter = this.csvMap.iterator(); iter.hasNext();) {
             Map<String, String> row = iter.next();
             String colSelectorValue = row.get(this.columnIdentifier);
             if (this.columnRegExp.matcher(colSelectorValue).matches()) {
-                result.put(lineIndex, row.get(this.columnSpec));
+                result.put(rowIndex, row.get(this.columnSpec));
             }
-            lineIndex++;
+            rowIndex++;
         }
 
         return result;
@@ -122,24 +122,24 @@ public class RegExpLineSelector implements CSVSelector {
 
     @Override
     public int setValues(String value) {
-        int affectedLines = 0;
-        int lineIndex = 0;
+        int affectedRows = 0;
+        int rowIndex = 0;
         for (Iterator<Map<String, String>> iter = this.csvMap.iterator(); iter.hasNext();) {
             Map<String, String> row = iter.next();
             String colSelectorValue = row.get(this.columnIdentifier);
             if (this.columnRegExp.matcher(colSelectorValue).matches()) {
-                this.validateWriteOperation(lineIndex);
+                this.validateWriteOperation(rowIndex);
                 row.put(this.columnSpec, value);
-                affectedLines++;
+                affectedRows++;
             }
-            lineIndex++;
+            rowIndex++;
         }
-        return affectedLines;
+        return affectedRows;
     }
 
-    private void validateWriteOperation(int lineIndex) {
-        if (lineIndex == this.csvContext.getHeaderLineIndex()) {
-            throw new RuntimeException("It is not allowed to change values of the header line (line index " + lineIndex + ")");
+    private void validateWriteOperation(int rowIndex) {
+        if (rowIndex == this.csvContext.getHeaderRowIndex()) {
+            throw new RuntimeException("It is not allowed to change values of the header row (row index " + rowIndex + ")");
         }
     }
 

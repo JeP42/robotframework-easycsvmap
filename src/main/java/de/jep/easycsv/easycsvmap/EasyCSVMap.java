@@ -27,23 +27,23 @@ public class EasyCSVMap {
 
     private CSVContext csvContext;
 
-    private LinkedList<String> headerLine;
+    private LinkedList<String> headerRow;
 
     private List<Map<String, String>> csvMap = new ArrayList<>();
 
     /**
      * Creates EasyCSVMap object.
-     * By specifying a header line via its line index, it is possible to access columns of the CSV format by its column name.
+     * By specifying a header row via its row index, it is possible to access columns of the CSV format by its column name.
      *
-     * @param headerLineIndex An arbitrary line in the CSV can be used as header line.
+     * @param headerRowIndex An arbitrary row in the CSV can be used as header row.
      */
-    public EasyCSVMap(int headerLineIndex) {
-        this(new CSVContext(headerLineIndex));
+    public EasyCSVMap(int headerRowIndex) {
+        this(new CSVContext(headerRowIndex));
     }
 
     /**
      * Creates EasyCSVMap object.
-     * This constructor is appropriate if the CSV format does only contain data lines but not a header line. If a header line exists in the CSV format use
+     * This constructor is appropriate if the CSV format does only contain data rows but not a header row. If a header row exists in the CSV format use
      * {@link EasyCSVMap#EasyCSVMap(int)} to construct the EasyCSVMap object.
      */
     public EasyCSVMap() {
@@ -78,28 +78,28 @@ public class EasyCSVMap {
      */
     public List<Map<String, String>> parseCsv(String csvString) {
 
-        // find the header line or create a pseudo header line
-        this.findHeaderLine(csvString);
+        // find the header row or create a pseudo header row
+        this.findHeaderRow(csvString);
 
-        // parse lines and put values into internal map
-        return this.processLines(csvString);
+        // parse rows and put values into internal map
+        return this.processRows(csvString);
     }
 
-    private void findHeaderLine(String csvString) {
+    private void findHeaderRow(String csvString) {
         CSVFileReader reader = null;
         try {
             reader = this.getReader(csvString);
-            String[] nextLine;
-            int lineIndex = 0;
+            String[] nextRow;
+            int rowIndex = 0;
 
-            while ((nextLine = reader.readNextLine()) != null) {
-                if (this.processHeaderLine(nextLine, lineIndex++)) {
+            while ((nextRow = reader.readNextLine()) != null) {
+                if (this.processHeaderRow(nextRow, rowIndex++)) {
 
                     break;
                 }
             }
 
-            this.validateHeaderLine();
+            this.validateHeaderRow();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
@@ -107,55 +107,55 @@ public class EasyCSVMap {
         }
     }
 
-    private void validateHeaderLine() {
-        // check if headerline exists...
-        if (this.headerLine == null) {
-            throw new RuntimeException("Failed to find the header line. Please check the specified header line index, maybe it does not exist in the given CSV format...");
+    private void validateHeaderRow() {
+        // check if header row exists...
+        if (this.headerRow == null) {
+            throw new RuntimeException("Failed to find the header row. Please check the specified header row index, maybe it does not exist in the given CSV format...");
         }
 
         // check for duplicate header columns:
-        if (this.headerLineContainsDuplicates()) {
-            throw new RuntimeException("The given header line is invalid as it contains duplicate column names");
+        if (this.headerRowContainsDuplicates()) {
+            throw new RuntimeException("The given header row is invalid as it contains duplicate column names");
         }
     }
 
-    private boolean headerLineContainsDuplicates() {
-        Set<String> colSet = new HashSet<String>(this.headerLine);
-        return this.headerLine.size() != colSet.size();
+    private boolean headerRowContainsDuplicates() {
+        Set<String> colSet = new HashSet<String>(this.headerRow);
+        return this.headerRow.size() != colSet.size();
     }
 
     private CSVFileReader getReader(String csvString) {
         return CSVFileFactory.getReader(csvString, this.csvContext.getColumnSeparator(), this.csvContext.getQuoteCharacter());
     }
 
-    private boolean processHeaderLine(String[] csvLine, int lineIndex) {
-        if (csvContext.hasHeaderLine()) {
-            if (lineIndex == this.csvContext.getHeaderLineIndex()) {
-                this.headerLine = this.asLinkedList(csvLine);
+    private boolean processHeaderRow(String[] csvRow, int rowIndex) {
+        if (csvContext.hasHeaderRow()) {
+            if (rowIndex == this.csvContext.getHeaderRowIndex()) {
+                this.headerRow = this.asLinkedList(csvRow);
                 return true;
             }
         } else {
-            this.headerLine = this.createStandardHeaderLine(csvLine.length);
+            this.headerRow = this.createStandardHeaderRow(csvRow.length);
             return true;
         }
         return false;
     }
 
-    private LinkedList<String> asLinkedList(String[] csvLine) {
+    private LinkedList<String> asLinkedList(String[] csvRow) {
         LinkedList<String> l = new LinkedList<>();
-        for (String v : csvLine) {
+        for (String v : csvRow) {
             l.add(v);
         }
         return l;
     }
 
-    private List<Map<String, String>> processLines(String csvString) {
+    private List<Map<String, String>> processRows(String csvString) {
         CSVFileReader reader = null;
         try {
             reader = this.getReader(csvString);
-            String[] nextLine;
-            while ((nextLine = reader.readNextLine()) != null) {
-                this.processDataLine(nextLine);
+            String[] nextRow;
+            while ((nextRow = reader.readNextLine()) != null) {
+                this.processDataRow(nextRow);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -166,56 +166,56 @@ public class EasyCSVMap {
         return this.csvMap;
     }
 
-    private void processDataLine(String[] csvLine) {
+    private void processDataRow(String[] csvRow) {
 
-        this.validateDataLine(csvLine);
+        this.validateDataRow(csvRow);
 
-        Map<String, String> dataLine = new LinkedHashMap<>();
-        int lineIndex = 0;
-        for (String value : csvLine) {
-            dataLine.put(this.headerLine.get(lineIndex++), value);
+        Map<String, String> dataRow = new LinkedHashMap<>();
+        int rowIndex = 0;
+        for (String value : csvRow) {
+            dataRow.put(this.headerRow.get(rowIndex++), value);
         }
 
-        this.csvMap.add(dataLine);
+        this.csvMap.add(dataRow);
     }
 
     /**
-     * A line is considered to be invalid if the number of columns differs from the number of columns of the header line
+     * A row is considered to be invalid if the number of columns differs from the number of columns of the header row
      *
-     * @param csvLine
+     * @param csvRow
      */
-    private void validateDataLine(String[] csvLine) {
-        if (csvLine.length != this.headerLine.size()) {
-            throw new RuntimeException("Number of elements of data line (" + csvLine.length + ") does not match the number of header columns (" + this.headerLine.size() + ").");
+    private void validateDataRow(String[] csvRow) {
+        if (csvRow.length != this.headerRow.size()) {
+            throw new RuntimeException("Number of elements of data row (" + csvRow.length + ") does not match the number of header columns (" + this.headerRow.size() + ").");
         }
     }
 
-    private LinkedList<String> createStandardHeaderLine(int numberOfColumns) {
-        LinkedList<String> standardHeaderLine = new LinkedList<>();
+    private LinkedList<String> createStandardHeaderRow(int numberOfColumns) {
+        LinkedList<String> standardHeaderRow = new LinkedList<>();
         int colIndex = 0;
         while (colIndex < numberOfColumns) {
-            standardHeaderLine.add("" + (colIndex++));
+            standardHeaderRow.add("" + (colIndex++));
         }
 
-        return standardHeaderLine;
+        return standardHeaderRow;
     }
 
     /**
      * Convenient method to retrieve the value of particular cells from the CSV structure. These cells can be selected via a selector expression.
-     * The syntax of the selector expression is <b>&lt;lineSpecification&gt;.&lt;columnName&gt;|&lt;columnIndex&gt;</b> Examples:
-     * <li><b>2.name</b> => if a header line was specified then the columns can be access via its name. Hence, this expression would find the value of column 'name' of the third
-     * line in the CSV (numeric line specification indicates a line index).</li>
-     * <li><b>2.10</b> => if no header line was explicitly specified then the columns have to be accessed via index. Hence, this expression would find the value of the eleventh
-     * column of the third line in the CSV.</li>
+     * The syntax of the selector expression is <b>&lt;rowSpecification&gt;.&lt;columnName&gt;|&lt;columnIndex&gt;</b> Examples:
+     * <li><b>2.name</b> => if a header row was specified then the columns can be access via its name. Hence, this expression would find the value of column 'name' of the third
+     * row in the CSV (numeric row specification indicates a row index).</li>
+     * <li><b>2.10</b> => if no header row was explicitly specified then the columns have to be accessed via index. Hence, this expression would find the value of the eleventh
+     * column of the third row in the CSV.</li>
      * <p>
-     * Beside simply using numeric line specifications it is also possible to use more complex ones, e.g. search a line via comparing column values with regular expressions.
+     * Beside simply using numeric row specifications it is also possible to use more complex ones, e.g. search a row via comparing column values with regular expressions.
      * Example:
-     * <li><b>[name=^Foo.*$].name</b> => Would find all lines in which column 'name' has a value matching the given regular expression.
+     * <li><b>[name=^Foo.*$].name</b> => Would find all rows in which column 'name' has a value matching the given regular expression.
      * <p>
-     * When using regular expressions as line specification it is possible that it matches more than just one line. hence, the method may return more then just one value.
+     * When using regular expressions as row specification it is possible that it matches more than just one row. hence, the method may return more then just one value.
      *
      * @param csvPath
-     * @return Map where the line index is used as Map-key and the cells value as Map-value
+     * @return Map where the row index is used as Map-key and the cells value as Map-value
      */
     @Nonnull
     public Map<Integer, String> getValues(String csvSelectorString) {
@@ -227,7 +227,7 @@ public class EasyCSVMap {
     /**
      * Convenient method to set the values of particular cells in the CSV structure. These cells can be selected via a selector expression, see
      * {@link EasyCSVMap#getValue(String)}. The given value is set for all cells matching the given selector expressions.
-     * If a header line was specified the corresponding line is read-only. An exception is thrown when trying the change a value of the header line.
+     * If a header row was specified the corresponding row is read-only. An exception is thrown when trying the change a value of the header row.
      *
      * @param csvPath
      * @return
@@ -283,11 +283,11 @@ public class EasyCSVMap {
     }
 
     /**
-     * Retrieves the total number of lines of the parsed CSV structure (including data lines and header lines)
+     * Retrieves the total number of rows of the parsed CSV structure (including data rows and header rows)
      *
      * @return
      */
-    public int getNumberOfCSVLines() {
+    public int getNumberOfCSVRows() {
         return this.csvMap.size();
     }
 
@@ -297,7 +297,7 @@ public class EasyCSVMap {
      * @return
      */
     public int getNumberOfCSVColumns() {
-        return this.headerLine.size();
+        return this.headerRow.size();
     }
 
 }

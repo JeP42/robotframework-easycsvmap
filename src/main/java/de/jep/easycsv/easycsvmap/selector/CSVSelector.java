@@ -26,7 +26,7 @@ public interface CSVSelector {
     public void parse() throws InvalidSelectorFormatException;
 
     /**
-     * Retrieves cell values from the given map according to the given selector and returns as map in which the key is the line index.
+     * Retrieves cell values from the given map according to the given selector and returns as map in which the key is the row index.
      * @return
      */
     Map<Integer, String> getValues();
@@ -34,7 +34,7 @@ public interface CSVSelector {
     /**
      * Sets values of cells identified by the given selector to the passed value.
      * @param value
-     * @return the number of updated lines
+     * @return the number of updated rows
      */
     int setValues(String value);
 

@@ -11,12 +11,12 @@ public final class CSVSelectorFactory {
 
     public static CSVSelector getCSVSelector(String csvSelector, List<Map<String, String>> csvMap, CSVContext csvContext) {
 
-        CSVSelector selector = new LineIndexSelector(csvSelector, csvMap, csvContext);
+        CSVSelector selector = new RowIndexSelector(csvSelector, csvMap, csvContext);
         if (selector.isValid()) {
             return selector;
         }
 
-        selector = new RegExpLineSelector(csvSelector, csvMap, csvContext);
+        selector = new RegExpRowSelector(csvSelector, csvMap, csvContext);
         if (selector.isValid()) {
             return selector;
         }

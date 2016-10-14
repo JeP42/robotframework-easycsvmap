@@ -60,7 +60,7 @@ public class EasyCSVMapTest {
     @Test
     public void parseCsv_nonStandardQuoteChar() {
         CSVContext csvContext = new CSVContext(42);
-        csvContext.setHeaderLine(0);
+        csvContext.setHeaderRow(0);
         csvContext.setQuoteCharacter('$');
 
         EasyCSVMap csvMap = new EasyCSVMap(csvContext);
@@ -128,7 +128,7 @@ public class EasyCSVMapTest {
 
         csvMap.parseCsvFromFile(csvFilePath);
 
-        assertEquals(5, csvMap.getNumberOfCSVLines());
+        assertEquals(5, csvMap.getNumberOfCSVRows());
     }
 
 
