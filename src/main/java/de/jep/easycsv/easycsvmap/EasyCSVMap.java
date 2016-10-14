@@ -1,8 +1,6 @@
 package de.jep.easycsv.easycsvmap;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,9 +12,10 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import au.com.bytecode.opencsv.CSVReader;
-import au.com.bytecode.opencsv.CSVWriter;
 import de.jep.easycsv.easycsvmap.core.CSVContext;
+import de.jep.easycsv.easycsvmap.csv.CSVFileFactory;
+import de.jep.easycsv.easycsvmap.csv.CSVFileReader;
+import de.jep.easycsv.easycsvmap.csv.CSVFileWriter;
 import de.jep.easycsv.easycsvmap.selector.CSVSelector;
 import de.jep.easycsv.easycsvmap.selector.CSVSelectorFactory;
 import de.jep.easycsv.easycsvmap.util.FileUtil;
@@ -87,13 +86,13 @@ public class EasyCSVMap {
     }
 
     private void findHeaderLine(String csvString) {
-        CSVReader reader = null;
+        CSVFileReader reader = null;
         try {
             reader = this.getReader(csvString);
             String[] nextLine;
             int lineIndex = 0;
 
-            while ((nextLine = reader.readNext()) != null) {
+            while ((nextLine = reader.readNextLine()) != null) {
                 if (this.processHeaderLine(nextLine, lineIndex++)) {
 
                     break;
@@ -125,8 +124,8 @@ public class EasyCSVMap {
         return this.headerLine.size() != colSet.size();
     }
 
-    private CSVReader getReader(String csvString) {
-        return new CSVReader(new StringReader(csvString), this.csvContext.getColumnSeparator(), this.csvContext.getQuoteCharacter());
+    private CSVFileReader getReader(String csvString) {
+        return CSVFileFactory.getReader(csvString, this.csvContext.getColumnSeparator(), this.csvContext.getQuoteCharacter());
     }
 
     private boolean processHeaderLine(String[] csvLine, int lineIndex) {
@@ -151,11 +150,11 @@ public class EasyCSVMap {
     }
 
     private List<Map<String, String>> processLines(String csvString) {
-        CSVReader reader = null;
+        CSVFileReader reader = null;
         try {
             reader = this.getReader(csvString);
             String[] nextLine;
-            while ((nextLine = reader.readNext()) != null) {
+            while ((nextLine = reader.readNextLine()) != null) {
                 this.processDataLine(nextLine);
             }
         } catch (IOException e) {
@@ -245,14 +244,15 @@ public class EasyCSVMap {
      * @param pathToCsv
      */
     public void saveToFile(String pathToCsv) {
-        CSVWriter writer = null;
+
+        CSVFileWriter writer = null;
         try {
-            writer = new CSVWriter(new FileWriter(pathToCsv), this.csvContext.getColumnSeparator());
+            writer = CSVFileFactory.getWriter(pathToCsv, this.csvContext.getColumnSeparator());
 
             Iterator<Map<String, String>> it = this.csvMap.iterator();
             while (it.hasNext()) {
                 String[] values = it.next().values().toArray(new String[] {});
-                writer.writeNext(values);
+                writer.writeNextLine(values);
             }
 
         } catch (IOException e) {
@@ -262,7 +262,7 @@ public class EasyCSVMap {
         }
     }
 
-    private void closeCSVWriter(CSVWriter writer) {
+    private void closeCSVWriter(CSVFileWriter writer) {
         try {
             if (writer != null) {
                 writer.close();
@@ -272,7 +272,7 @@ public class EasyCSVMap {
         }
     }
 
-    private void closeCSVReader(CSVReader reader) {
+    private void closeCSVReader(CSVFileReader reader) {
         try {
             if (reader != null) {
                 reader.close();
