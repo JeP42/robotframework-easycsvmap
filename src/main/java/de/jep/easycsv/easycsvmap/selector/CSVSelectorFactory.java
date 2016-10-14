@@ -1,7 +1,9 @@
-package de.jep.easycsvmap;
+package de.jep.easycsv.easycsvmap.selector;
 
 import java.util.List;
 import java.util.Map;
+
+import de.jep.easycsv.easycsvmap.core.CSVContext;
 
 public final class CSVSelectorFactory {
 

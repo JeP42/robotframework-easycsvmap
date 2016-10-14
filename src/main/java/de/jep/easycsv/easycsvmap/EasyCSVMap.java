@@ -1,4 +1,4 @@
-package de.jep.easycsvmap;
+package de.jep.easycsv.easycsvmap;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,6 +16,10 @@ import javax.annotation.Nonnull;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
+import de.jep.easycsv.easycsvmap.core.CSVContext;
+import de.jep.easycsv.easycsvmap.selector.CSVSelector;
+import de.jep.easycsv.easycsvmap.selector.CSVSelectorFactory;
+import de.jep.easycsv.easycsvmap.util.FileUtil;
 
 /**
  * EasyCSVMap allows parsing CSV files and accessing elements via name and/or index.
@@ -112,7 +116,7 @@ public class EasyCSVMap {
 
         // check for duplicate header columns:
         if (this.headerLineContainsDuplicates()) {
-            throw new RuntimeException("The given header line is invalid as it contains duplicate colum names");
+            throw new RuntimeException("The given header line is invalid as it contains duplicate column names");
         }
     }
 
@@ -183,7 +187,7 @@ public class EasyCSVMap {
      */
     private void validateDataLine(String[] csvLine) {
         if (csvLine.length != this.headerLine.size()) {
-            throw new RuntimeException("Number of elements of data line (" + csvLine.length + ")does not match the number of header columns (" + this.headerLine.size() + ").");
+            throw new RuntimeException("Number of elements of data line (" + csvLine.length + ") does not match the number of header columns (" + this.headerLine.size() + ").");
         }
     }
 
@@ -278,10 +282,20 @@ public class EasyCSVMap {
         }
     }
 
+    /**
+     * Retrieves the total number of lines of the parsed CSV structure (including data lines and header lines)
+     *
+     * @return
+     */
     public int getNumberOfCSVLines() {
         return this.csvMap.size();
     }
 
+    /**
+     * Retrieves the total number of columns of the parsed CSV structure
+     *
+     * @return
+     */
     public int getNumberOfCSVColumns() {
         return this.headerLine.size();
     }

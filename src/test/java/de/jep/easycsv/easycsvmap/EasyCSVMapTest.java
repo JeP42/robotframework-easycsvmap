@@ -1,4 +1,4 @@
-package de.jep.easycsvmap;
+package de.jep.easycsv.easycsvmap;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,6 +6,8 @@ import java.io.IOException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+
+import de.jep.easycsv.easycsvmap.core.CSVContext;
 
 public class EasyCSVMapTest {
 

@@ -1,4 +1,4 @@
-package de.jep.easycsvmap;
+package de.jep.easycsv.easycsvmap.selector;
 
 import java.util.Iterator;
 import java.util.List;
@@ -8,8 +8,14 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
+import de.jep.easycsv.easycsvmap.core.CSVContext;
+import de.jep.easycsv.easycsvmap.core.InvalidSelectorFormatException;
+import de.jep.easycsv.easycsvmap.util.CSVMapUtil;
+
 
 public class RegExpLineSelector implements CSVSelector {
+
+    private static final char FORMAT_SEPARATOR_CHARACTER = '.';
 
     private String selector;
 
@@ -22,6 +28,7 @@ public class RegExpLineSelector implements CSVSelector {
     private String columnIdentifier;
 
     private Pattern columnRegExp;
+
 
     public RegExpLineSelector(String selector, List<Map<String, String>> csvMap, CSVContext csvContext) {
         this.selector = selector;
@@ -45,13 +52,12 @@ public class RegExpLineSelector implements CSVSelector {
         this.csvMap = csvMap;
     }
 
-
     @Override
     public boolean isValid() {
         // try to parse the given selector string
         try {
-            this.parse(this.selector);
-        } catch (InvalidSelectorException e) {
+            this.parse();
+        } catch (InvalidSelectorFormatException e) {
             // ignore this as
             return false;
         }
@@ -59,24 +65,29 @@ public class RegExpLineSelector implements CSVSelector {
         return true;
     }
 
-    private void parse(String selector) throws InvalidSelectorException {
+    @Override
+    public void parse() throws InvalidSelectorFormatException {
         this.validateFormat();
 
-        int guessedSeparatorIdx = this.selector.lastIndexOf('.');
-        String[] selectorFragments = new String[] { this.selector.substring(0, guessedSeparatorIdx), this.selector.substring(guessedSeparatorIdx + 1) };
+        String[] selectorFragments = this.getSelectorFragments();
 
-        this.validateLineSpec(selectorFragments[0]);
-        this.validateColumnSpec(selectorFragments[1]);
+        new RegExpLineValidator(selectorFragments[0]).validate();
+        new ColumnSpecFormatValidator(selectorFragments[1]).validate();
 
         this.columnSpec = selectorFragments[1];
         this.columnIdentifier = this.getColumnIdentifier(selectorFragments[0]);
         this.columnRegExp = this.getColumnRegExpPattern(selectorFragments[0]);
     }
 
-    private void validateFormat() throws InvalidSelectorException {
+    private String[] getSelectorFragments() {
+        int guessedSeparatorIdx = this.selector.lastIndexOf(FORMAT_SEPARATOR_CHARACTER);
+        return new String[] { this.selector.substring(0, guessedSeparatorIdx), this.selector.substring(guessedSeparatorIdx + 1) };
+    }
+
+    private void validateFormat() throws InvalidSelectorFormatException {
         int guessedSeparatorIdx = this.selector.lastIndexOf('.');
         if (guessedSeparatorIdx == -1) {
-            throw new InvalidSelectorException("The given format " + this.selector + " does not match the expected format.");
+            throw new InvalidSelectorFormatException("The given format " + this.selector + " does not match the expected format.");
         }
     }
 
@@ -89,35 +100,6 @@ public class RegExpLineSelector implements CSVSelector {
         String[] lineSpecFragments = CSVMapUtil.removeBracesFromString(lineSpec).split("=", 2);
         return lineSpecFragments[0];
     }
-
-    /*
-     * format of a valid line spec is [key=value] where the value is a regular expression
-     */
-    private void validateLineSpec(String lineSpec) throws InvalidSelectorException {
-        if (!lineSpec.startsWith("[") || !lineSpec.endsWith("]")) {
-            throw new InvalidSelectorException("Invalid format of the given line specification as part of " + this.selector);
-        }
-
-        String[] lineSpecFragments = CSVMapUtil.removeBracesFromString(lineSpec).split("=", 2);
-        if (lineSpecFragments.length != 2) {
-            throw new InvalidSelectorException("Invalid format of the given line specification as part of " + this.selector);
-        }
-
-        if (lineSpecFragments[0].length() < 1) {
-            throw new InvalidSelectorException("The columns spec as part of the line specification is invalid: " + this.selector);
-        }
-
-        if (lineSpecFragments[1].length() < 1) {
-            throw new InvalidSelectorException("The columns reg exp as part of the line specification is invalid: " + this.selector);
-        }
-    }
-
-    private void validateColumnSpec(String columnSpec) throws InvalidSelectorException {
-        if (columnSpec.length() < 1) {
-            throw new InvalidSelectorException("The columns specification is missing in the given selector " + this.selector);
-        }
-    }
-
 
 
     @Override
@@ -139,7 +121,8 @@ public class RegExpLineSelector implements CSVSelector {
     }
 
     @Override
-    public void setValues(String value) {
+    public int setValues(String value) {
+        int affectedLines = 0;
         int lineIndex = 0;
         for (Iterator<Map<String, String>> iter = this.csvMap.iterator(); iter.hasNext();) {
             Map<String, String> row = iter.next();
@@ -147,9 +130,11 @@ public class RegExpLineSelector implements CSVSelector {
             if (this.columnRegExp.matcher(colSelectorValue).matches()) {
                 this.validateWriteOperation(lineIndex);
                 row.put(this.columnSpec, value);
+                affectedLines++;
             }
             lineIndex++;
         }
+        return affectedLines;
     }
 
     private void validateWriteOperation(int lineIndex) {
@@ -157,5 +142,6 @@ public class RegExpLineSelector implements CSVSelector {
             throw new RuntimeException("It is not allowed to change values of the header line (line index " + lineIndex + ")");
         }
     }
+
 
 }

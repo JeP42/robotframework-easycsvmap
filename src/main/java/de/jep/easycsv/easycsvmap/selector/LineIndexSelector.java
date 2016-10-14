@@ -1,4 +1,4 @@
-package de.jep.easycsvmap;
+package de.jep.easycsv.easycsvmap.selector;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -6,10 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import de.jep.easycsv.easycsvmap.core.CSVContext;
+import de.jep.easycsv.easycsvmap.core.InvalidSelectorFormatException;
+import de.jep.easycsv.easycsvmap.util.CSVMapUtil;
+
 
 public class LineIndexSelector implements CSVSelector {
 
-    private static final Object ALL_INDEXES_WILCARD_CHARACTER = "*";
+    private static final char FORMAT_SEPARATOR_CHARACTER = '.';
+
+    protected static final Object ALL_INDEXES_WILCARD_CHARACTER = "*";
 
     private String selector;
 
@@ -17,11 +23,12 @@ public class LineIndexSelector implements CSVSelector {
 
     private CSVContext csvContext;
 
-    private List<Integer> lineIndexList;
+    private List<Integer> selectedLineIndexList;
 
     private boolean allLineIndexes;
 
     private String columnSpec;
+
 
     public LineIndexSelector(String selector, List<Map<String, String>> csvMap, CSVContext csvContext) {
         this.selector = selector;
@@ -49,8 +56,8 @@ public class LineIndexSelector implements CSVSelector {
     public boolean isValid() {
         // try to parse the given selector string
         try {
-            this.parse(this.selector);
-        } catch (InvalidSelectorException e) {
+            this.parse();
+        } catch (InvalidSelectorFormatException e) {
             // ignore this as
             return false;
         }
@@ -58,27 +65,36 @@ public class LineIndexSelector implements CSVSelector {
         return true;
     }
 
-    private void parse(String selector) throws InvalidSelectorException {
+    @Override
+    public void parse() throws InvalidSelectorFormatException {
         this.validateFormat();
 
-        int guessedSeparatorIdx = this.selector.lastIndexOf('.');
-        String[] selectorFragments = new String[] { this.selector.substring(0, guessedSeparatorIdx), this.selector.substring(guessedSeparatorIdx + 1) };
+        String[] selectorFragments = this.getSelectorFragments();
+        new LineIndexFormatValidator(selectorFragments[0]).validate();
+        new ColumnSpecFormatValidator(selectorFragments[1]).validate();
 
-        this.validateLineSpec(selectorFragments[0]);
-        this.validateColumnSpec(selectorFragments[1]);
-
-        this.columnSpec = selectorFragments[1];
-
+        // first part of the selector is the line specification
         String[] lineSpec = CSVMapUtil.removeBracesFromString(selectorFragments[0]).split(",");
         this.allLineIndexes = (lineSpec.length == 1 && ALL_INDEXES_WILCARD_CHARACTER.equals(lineSpec[0]));
-        this.lineIndexList = this.getLineIndexListFromStringArray(lineSpec);
+        this.selectedLineIndexList = this.getLineIndexListFromStringArray(lineSpec);
+
+        // second part of the selector is the column specification
+        this.columnSpec = selectorFragments[1];
     }
 
-    private void validateFormat() throws InvalidSelectorException {
-        int guessedSeparatorIdx = this.selector.lastIndexOf('.');
+    /*
+     * expect existence of a FORMAT_SEPARATOR_CHARACTER (.) in the selector expression
+     */
+    private void validateFormat() throws InvalidSelectorFormatException {
+        int guessedSeparatorIdx = this.selector.lastIndexOf(FORMAT_SEPARATOR_CHARACTER);
         if (guessedSeparatorIdx == -1) {
-            throw new InvalidSelectorException("The given format " + this.selector + " does not match the expected format.");
+            throw new InvalidSelectorFormatException("The given format " + this.selector + " does not match the expected format.");
         }
+    }
+
+    private String[] getSelectorFragments() {
+        int guessedSeparatorIdx = this.selector.lastIndexOf(FORMAT_SEPARATOR_CHARACTER);
+        return new String[] { this.selector.substring(0, guessedSeparatorIdx), this.selector.substring(guessedSeparatorIdx + 1) };
     }
 
     private List<Integer> getLineIndexListFromStringArray(String[] lineSpec) {
@@ -91,49 +107,10 @@ public class LineIndexSelector implements CSVSelector {
         return indexList;
     }
 
-    /*
-     * format of a valid line spec is {lineIndex|lineIndexList} (TODO |lineIndexRange)
-     */
-    private void validateLineSpec(String lineSpec) throws InvalidSelectorException {
-        if (!lineSpec.startsWith("{") || !lineSpec.endsWith("}")) {
-            throw new InvalidSelectorException("Invalid format of the given line specification as part of " + this.selector);
-        }
-
-        String[] lineIndexList = CSVMapUtil.removeBracesFromString(lineSpec).split(",");
-        validateLineIndexList(lineIndexList);
-    }
-
-    /*
-     * If list contains just one element this may be the WILDCARD character, otherwise all list items
-     * must be valid integers
-     */
-    private void validateLineIndexList(String[] lineIndexList) throws InvalidSelectorException {
-        if (lineIndexList.length == 1 && ALL_INDEXES_WILCARD_CHARACTER.equals(lineIndexList[0])) {
-            return;
-        }
-
-        for (String listitem : lineIndexList) {
-            if (!CSVMapUtil.isValidInteger(listitem)) {
-                if (ALL_INDEXES_WILCARD_CHARACTER.equals(listitem)) {
-                    throw new InvalidSelectorException("Do not mix-up line indexes and the wilcard character (" + ALL_INDEXES_WILCARD_CHARACTER + ") " + this.selector);
-                }
-                throw new InvalidSelectorException("The given line index list contains invalid line indexes " + this.selector);
-            }
-        }
-    }
-
-
-
-    private void validateColumnSpec(String columnSpec) throws InvalidSelectorException {
-        if (columnSpec.length() < 1) {
-            throw new InvalidSelectorException("The columns specification is missing in the given selector " + this.selector);
-        }
-    }
 
     @Override
     public Map<Integer, String> getValues() {
         Map<Integer, String> result = new ConcurrentHashMap<>();
-
         int lineIndex = 0;
         for (Iterator<Map<String, String>> iter = this.csvMap.iterator(); iter.hasNext();) {
             Map<String, String> row = iter.next();
@@ -147,21 +124,26 @@ public class LineIndexSelector implements CSVSelector {
     }
 
     private boolean isLineSelected(int lineIndex) {
-        return this.allLineIndexes || this.lineIndexList.contains(lineIndex);
+        return this.allLineIndexes || this.selectedLineIndexList.contains(lineIndex);
     }
 
     @Override
-    public void setValues(String value) {
+    public int setValues(String value) {
+        int affectedLines = 0;
         int lineIndex = 0;
         for (Iterator<Map<String, String>> iter = this.csvMap.iterator(); iter.hasNext();) {
             Map<String, String> row = iter.next();
             if (this.isLineSelected(lineIndex)) {
                 this.validateWriteOperation(lineIndex);
                 row.put(this.columnSpec, value);
+                affectedLines++;
             }
             lineIndex++;
         }
+        return affectedLines;
     }
+
+
 
     private void validateWriteOperation(int lineIndex) {
         if (lineIndex == this.csvContext.getHeaderLineIndex()) {

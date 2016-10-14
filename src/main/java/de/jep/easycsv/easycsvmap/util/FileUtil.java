@@ -1,4 +1,4 @@
-package de.jep.easycsvmap;
+package de.jep.easycsv.easycsvmap.util;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

@@ -1,4 +1,4 @@
-package de.jep.easycsvmap;
+package de.jep.easycsv.easycsvmap.util;
 
 
 public final class CSVMapUtil {
