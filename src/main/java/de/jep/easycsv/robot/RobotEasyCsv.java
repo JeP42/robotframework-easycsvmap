@@ -27,12 +27,21 @@ public class RobotEasyCsv {
     @RobotKeyword("Set Csv Values")
     @ArgumentNames({ "csvSelector", "value" })
     public void setCsvValues(String csvSelector, String value) {
+        this.checkInitialized();
         this.easyCsvMap.setValues(csvSelector, value);
+    }
+
+    private void checkInitialized() {
+        if (this.easyCsvMap == null) {
+            throw new RobotCsvException("EasyCsv has to be initialized via parseCsvFromFile first");
+        }
     }
 
     @RobotKeyword("Get First Csv Value")
     @ArgumentNames({ "csvSelector" })
     public String getFirstCsvValue(String csvSelector) {
+        this.checkInitialized();
+
         // cannot return Map to robot, so just return the value
         Iterator<String> it = this.easyCsvMap.getValues(csvSelector).values().iterator();
         if (it.hasNext()) {
@@ -45,6 +54,7 @@ public class RobotEasyCsv {
     @RobotKeyword("Get All Csv Values")
     @ArgumentNames({ "csvSelector" })
     public List<String> getAllCsvValues(String csvSelector) {
+        this.checkInitialized();
         // cannot return Map to robot, so just return the values
         return new ArrayList<>(this.easyCsvMap.getValues(csvSelector).values());
     }
@@ -52,6 +62,7 @@ public class RobotEasyCsv {
     @RobotKeyword("Save Csv To File")
     @ArgumentNames({ "csvSelector" })
     public void saveCsvToFile(String filePath) {
+        this.checkInitialized();
         this.easyCsvMap.saveToFile(filePath);
     }
 

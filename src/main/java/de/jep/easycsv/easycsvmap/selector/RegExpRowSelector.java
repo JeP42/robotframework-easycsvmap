@@ -3,25 +3,20 @@ package de.jep.easycsv.easycsvmap.selector;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
 import de.jep.easycsv.easycsvmap.core.CSVContext;
+import de.jep.easycsv.easycsvmap.core.CSVMapException;
 import de.jep.easycsv.easycsvmap.core.InvalidSelectorFormatException;
 import de.jep.easycsv.easycsvmap.util.CSVMapUtil;
 
 
-public class RegExpRowSelector implements CSVSelector {
+public class RegExpRowSelector extends AbstractCSVSelector {
 
     private static final char FORMAT_SEPARATOR_CHARACTER = '.';
-
-    private String selector;
-
-    private List<Map<String, String>> csvMap;
-
-    private CSVContext csvContext;
 
     private String columnSpec;
 
@@ -31,39 +26,9 @@ public class RegExpRowSelector implements CSVSelector {
 
 
     public RegExpRowSelector(String selector, List<Map<String, String>> csvMap, CSVContext csvContext) {
-        this.selector = selector;
-        this.csvMap = csvMap;
-        this.csvContext = csvContext;
+        super(selector, csvMap, csvContext);
     }
 
-    @Override
-    public void setSelector(String csvSelectorString) {
-        this.selector = csvSelectorString;
-    }
-
-    @Override
-    public void setCSVContext(CSVContext csvContext) {
-        this.csvContext = csvContext;
-    }
-
-
-    @Override
-    public void setCSVMap(List<Map<String, String>> csvMap) {
-        this.csvMap = csvMap;
-    }
-
-    @Override
-    public boolean isValid() {
-        // try to parse the given selector string
-        try {
-            this.parse();
-        } catch (InvalidSelectorFormatException e) {
-            // ignore this as
-            return false;
-        }
-
-        return true;
-    }
 
     @Override
     public void parse() throws InvalidSelectorFormatException {
@@ -105,7 +70,7 @@ public class RegExpRowSelector implements CSVSelector {
     @Override
     @Nonnull
     public Map<Integer, String> getValues() {
-        Map<Integer, String> result = new ConcurrentHashMap<>();
+        Map<Integer, String> result = new TreeMap<>();
 
         int rowIndex = 0;
         for (Iterator<Map<String, String>> iter = this.csvMap.iterator(); iter.hasNext();) {
@@ -139,7 +104,7 @@ public class RegExpRowSelector implements CSVSelector {
 
     private void validateWriteOperation(int rowIndex) {
         if (rowIndex == this.csvContext.getHeaderRowIndex()) {
-            throw new RuntimeException("It is not allowed to change values of the header row (row index " + rowIndex + ")");
+            throw new CSVMapException("It is not allowed to change values of the header row (row index " + rowIndex + ")");
         }
     }
 

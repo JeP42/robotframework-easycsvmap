@@ -7,20 +7,20 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 public class OpenCSVWriter implements CSVFileWriter {
 
-    private CSVWriter openCsvWriter;
+    private CSVWriter csvWriter;
 
     public OpenCSVWriter(String targetPath, char columnSeparator) throws IOException {
-        this.openCsvWriter = new CSVWriter(new FileWriter(targetPath), columnSeparator);
+        this.csvWriter = new CSVWriter(new FileWriter(targetPath), columnSeparator);
     }
 
     @Override
     public void writeNextLine(String[] values) {
-        this.openCsvWriter.writeNext(values);
+        this.csvWriter.writeNext(values);
     }
 
     @Override
     public void close() throws IOException {
-        this.openCsvWriter.close();
+        this.csvWriter.close();
     }
 
 }

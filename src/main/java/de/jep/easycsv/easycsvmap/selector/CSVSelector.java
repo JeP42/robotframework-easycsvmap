@@ -27,6 +27,7 @@ public interface CSVSelector {
 
     /**
      * Retrieves cell values from the given map according to the given selector and returns as map in which the key is the row index.
+     * The elements of the map are order by the key.
      * @return
      */
     Map<Integer, String> getValues();

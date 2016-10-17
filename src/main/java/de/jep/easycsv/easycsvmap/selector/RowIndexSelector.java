@@ -4,24 +4,21 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.TreeMap;
+
+import javax.annotation.Nonnull;
 
 import de.jep.easycsv.easycsvmap.core.CSVContext;
+import de.jep.easycsv.easycsvmap.core.CSVMapException;
 import de.jep.easycsv.easycsvmap.core.InvalidSelectorFormatException;
 import de.jep.easycsv.easycsvmap.util.CSVMapUtil;
 
 
-public class RowIndexSelector implements CSVSelector {
+public class RowIndexSelector extends AbstractCSVSelector {
 
     private static final char FORMAT_SEPARATOR_CHARACTER = '.';
 
     protected static final Object ALL_INDEXES_WILCARD_CHARACTER = "*";
-
-    private String selector;
-
-    private List<Map<String, String>> csvMap;
-
-    private CSVContext csvContext;
 
     private List<Integer> selectedRowIndexList;
 
@@ -31,51 +28,22 @@ public class RowIndexSelector implements CSVSelector {
 
 
     public RowIndexSelector(String selector, List<Map<String, String>> csvMap, CSVContext csvContext) {
-        this.selector = selector;
-        this.csvMap = csvMap;
-        this.csvContext = csvContext;
+        super(selector, csvMap, csvContext);
     }
 
-    @Override
-    public void setSelector(String csvSelectorString) {
-        this.selector = csvSelectorString;
-    }
-
-    @Override
-    public void setCSVContext(CSVContext csvContext) {
-        this.csvContext = csvContext;
-    }
-
-    @Override
-    public void setCSVMap(List<Map<String, String>> csvMap) {
-        this.csvMap = csvMap;
-    }
-
-
-    @Override
-    public boolean isValid() {
-        // try to parse the given selector string
-        try {
-            this.parse();
-        } catch (InvalidSelectorFormatException e) {
-            // ignore this as
-            return false;
-        }
-
-        return true;
-    }
 
     @Override
     public void parse() throws InvalidSelectorFormatException {
         this.validateFormat();
 
         String[] selectorFragments = this.getSelectorFragments();
+
         new RowIndexFormatValidator(selectorFragments[0]).validate();
         new ColumnSpecFormatValidator(selectorFragments[1]).validate();
 
         // first part of the selector is the row specification
         String[] rowSpec = CSVMapUtil.removeBracesFromString(selectorFragments[0]).split(",");
-        this.allRowIndexes = (rowSpec.length == 1 && ALL_INDEXES_WILCARD_CHARACTER.equals(rowSpec[0]));
+        this.allRowIndexes = rowSpec.length == 1 && ALL_INDEXES_WILCARD_CHARACTER.equals(rowSpec[0]);
         this.selectedRowIndexList = this.getRowIndexListFromStringArray(rowSpec);
 
         // second part of the selector is the column specification
@@ -109,8 +77,9 @@ public class RowIndexSelector implements CSVSelector {
 
 
     @Override
+    @Nonnull
     public Map<Integer, String> getValues() {
-        Map<Integer, String> result = new ConcurrentHashMap<>();
+        Map<Integer, String> result = new TreeMap<>();
         int rowIndex = 0;
         for (Iterator<Map<String, String>> iter = this.csvMap.iterator(); iter.hasNext();) {
             Map<String, String> row = iter.next();
@@ -147,7 +116,7 @@ public class RowIndexSelector implements CSVSelector {
 
     private void validateWriteOperation(int rowsIndex) {
         if (rowsIndex == this.csvContext.getHeaderRowIndex()) {
-            throw new RuntimeException("It is not allowed to change values of the header row (row index " + rowsIndex + ")");
+            throw new CSVMapException("It is not allowed to change values of the header row (row index " + rowsIndex + ")");
         }
     }
 

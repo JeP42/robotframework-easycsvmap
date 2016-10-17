@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import de.jep.easycsv.easycsvmap.core.CSVContext;
+import de.jep.easycsv.easycsvmap.core.CSVMapException;
 import de.jep.easycsv.easycsvmap.csv.CSVFileFactory;
 import de.jep.easycsv.easycsvmap.csv.CSVFileReader;
 import de.jep.easycsv.easycsvmap.csv.CSVFileWriter;
@@ -24,6 +25,8 @@ import de.jep.easycsv.easycsvmap.util.FileUtil;
  * EasyCSVMap allows parsing CSV files and accessing elements via name and/or index.
  */
 public class EasyCSVMap {
+
+    private static final String UNEXPECTED_EXCEPTION_MESSAGE = "An unexpected exception occured. See stacktrace for details about the root cause.";
 
     private CSVContext csvContext;
 
@@ -67,7 +70,11 @@ public class EasyCSVMap {
      * @return
      */
     public List<Map<String, String>> parseCsvFromFile(String csvFilePath) {
-        return this.parseCsv(FileUtil.loadFile(csvFilePath));
+        try {
+            return this.parseCsv(FileUtil.loadFile(csvFilePath));
+        } catch (IOException e) {
+            throw new CSVMapException(UNEXPECTED_EXCEPTION_MESSAGE, e);
+        }
     }
 
     /**
@@ -101,7 +108,7 @@ public class EasyCSVMap {
 
             this.validateHeaderRow();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CSVMapException(UNEXPECTED_EXCEPTION_MESSAGE, e);
         } finally {
             this.closeCSVReader(reader);
         }
@@ -110,17 +117,17 @@ public class EasyCSVMap {
     private void validateHeaderRow() {
         // check if header row exists...
         if (this.headerRow == null) {
-            throw new RuntimeException("Failed to find the header row. Please check the specified header row index, maybe it does not exist in the given CSV format...");
+            throw new CSVMapException("Failed to find the header row. Please check the specified header row index, maybe it does not exist in the given CSV format...");
         }
 
         // check for duplicate header columns:
         if (this.headerRowContainsDuplicates()) {
-            throw new RuntimeException("The given header row is invalid as it contains duplicate column names");
+            throw new CSVMapException("The given header row is invalid as it contains duplicate column names");
         }
     }
 
     private boolean headerRowContainsDuplicates() {
-        Set<String> colSet = new HashSet<String>(this.headerRow);
+        Set<String> colSet = new HashSet<>(this.headerRow);
         return this.headerRow.size() != colSet.size();
     }
 
@@ -158,7 +165,7 @@ public class EasyCSVMap {
                 this.processDataRow(nextRow);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CSVMapException(UNEXPECTED_EXCEPTION_MESSAGE, e);
         } finally {
             this.closeCSVReader(reader);
         }
@@ -186,7 +193,7 @@ public class EasyCSVMap {
      */
     private void validateDataRow(String[] csvRow) {
         if (csvRow.length != this.headerRow.size()) {
-            throw new RuntimeException("Number of elements of data row (" + csvRow.length + ") does not match the number of header columns (" + this.headerRow.size() + ").");
+            throw new CSVMapException("Number of elements of data row (" + csvRow.length + ") does not match the number of header columns (" + this.headerRow.size() + ").");
         }
     }
 
@@ -194,7 +201,7 @@ public class EasyCSVMap {
         LinkedList<String> standardHeaderRow = new LinkedList<>();
         int colIndex = 0;
         while (colIndex < numberOfColumns) {
-            standardHeaderRow.add("" + (colIndex++));
+            standardHeaderRow.add(Integer.toString(colIndex++));
         }
 
         return standardHeaderRow;
@@ -256,7 +263,7 @@ public class EasyCSVMap {
             }
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CSVMapException(UNEXPECTED_EXCEPTION_MESSAGE, e);
         } finally {
             closeCSVWriter(writer);
         }
@@ -268,7 +275,7 @@ public class EasyCSVMap {
                 writer.close();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CSVMapException(UNEXPECTED_EXCEPTION_MESSAGE, e);
         }
     }
 
@@ -278,7 +285,7 @@ public class EasyCSVMap {
                 reader.close();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CSVMapException(UNEXPECTED_EXCEPTION_MESSAGE, e);
         }
     }
 

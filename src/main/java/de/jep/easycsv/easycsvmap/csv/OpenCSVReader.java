@@ -8,21 +8,21 @@ import au.com.bytecode.opencsv.CSVReader;
 public class OpenCSVReader implements CSVFileReader {
 
 
-    CSVReader openCsvReader;
+    CSVReader csvReader;
 
     public OpenCSVReader(String csvString, char columnSeparator, char quoteCharacter) {
         super();
-        this.openCsvReader = new CSVReader(new StringReader(csvString), columnSeparator, quoteCharacter);
+        this.csvReader = new CSVReader(new StringReader(csvString), columnSeparator, quoteCharacter);
     }
 
     @Override
     public String[] readNextLine() throws IOException {
-        return this.openCsvReader.readNext();
+        return this.csvReader.readNext();
     }
 
     @Override
     public void close() throws IOException {
-        this.openCsvReader.close();
+        this.csvReader.close();
     }
 
 }

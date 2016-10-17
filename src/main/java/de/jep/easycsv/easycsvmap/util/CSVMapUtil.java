@@ -8,6 +8,7 @@ public final class CSVMapUtil {
     public static boolean isValidInteger(String intString) {
         try {
             Integer.parseInt(intString);
+
         } catch (NumberFormatException e) {
             // we can ignore this...its ok...really...
             return false;

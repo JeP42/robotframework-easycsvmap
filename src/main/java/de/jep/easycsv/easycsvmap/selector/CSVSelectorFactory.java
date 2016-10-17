@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.jep.easycsv.easycsvmap.core.CSVContext;
+import de.jep.easycsv.easycsvmap.core.CSVMapException;
 
 public final class CSVSelectorFactory {
 
@@ -22,7 +23,7 @@ public final class CSVSelectorFactory {
         }
 
 
-        throw new RuntimeException("The given CSV selector " + csvSelector + " is not supported.");
+        throw new CSVMapException("The given CSV selector " + csvSelector + " is not supported.");
     }
 
 
