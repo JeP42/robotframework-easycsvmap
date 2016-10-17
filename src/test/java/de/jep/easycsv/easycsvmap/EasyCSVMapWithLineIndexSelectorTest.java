@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import de.jep.easycsv.easycsvmap.core.InvalidSelectorValueException;
+
 public class EasyCSVMapWithLineIndexSelectorTest {
 
 
@@ -29,6 +31,16 @@ public class EasyCSVMapWithLineIndexSelectorTest {
         csvMap.parseCsvFromFile(csvFilePath);
 
         csvMap.getValues("{1}.");
+    }
+
+    @Test(expected = InvalidSelectorValueException.class)
+    public void getValues_invalidColumnSpec() {
+        EasyCSVMap csvMap = new EasyCSVMap(0);
+        String csvFilePath = ClassLoader.getSystemResource("de/jep/easycsvmap/header-0-five-lines.csv").getFile();
+
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        csvMap.getValues("{1}.NotExisingColumnSpec");
     }
 
     @Test(expected = RuntimeException.class)

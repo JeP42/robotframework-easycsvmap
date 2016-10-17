@@ -5,6 +5,7 @@ import java.util.Map;
 
 import de.jep.easycsv.easycsvmap.core.CSVContext;
 import de.jep.easycsv.easycsvmap.core.InvalidSelectorFormatException;
+import de.jep.easycsv.easycsvmap.core.InvalidSelectorValueException;
 
 public interface CSVSelector {
 
@@ -28,6 +29,7 @@ public interface CSVSelector {
     /**
      * Retrieves cell values from the given map according to the given selector and returns as map in which the key is the row index.
      * The elements of the map are order by the key.
+     * @throws InvalidSelectorValueException if the given selector does not match one of the existing columns
      * @return
      */
     Map<Integer, String> getValues();

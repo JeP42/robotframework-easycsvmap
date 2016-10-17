@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import de.jep.easycsv.easycsvmap.core.InvalidSelectorValueException;
+
 public class EasyCSVMapwithRegExpLineSelectorTest {
 
     @Test(expected = RuntimeException.class)
@@ -83,6 +85,16 @@ public class EasyCSVMapwithRegExpLineSelectorTest {
         csvMap.parseCsvFromFile(csvFilePath);
 
         csvMap.getValues("[Col0-Header=1.*$].");
+    }
+
+    @Test(expected = InvalidSelectorValueException.class)
+    public void getValues_invalidColumnSpec() {
+        EasyCSVMap csvMap = new EasyCSVMap(0);
+        String csvFilePath = ClassLoader.getSystemResource("de/jep/easycsvmap/header-0-five-lines.csv").getFile();
+
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        csvMap.getValues("[Col0-Header=^datacol0-line.*$].NotExisignColumnSpec");
     }
 
     @Test

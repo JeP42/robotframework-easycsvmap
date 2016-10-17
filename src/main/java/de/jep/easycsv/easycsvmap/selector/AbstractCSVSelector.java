@@ -3,11 +3,14 @@ package de.jep.easycsv.easycsvmap.selector;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.jep.easycsv.easycsvmap.core.CSVContext;
 import de.jep.easycsv.easycsvmap.core.InvalidSelectorFormatException;
+import de.jep.easycsv.easycsvmap.core.InvalidSelectorValueException;
 
 
 public abstract class AbstractCSVSelector implements CSVSelector {
@@ -54,6 +57,14 @@ public abstract class AbstractCSVSelector implements CSVSelector {
         }
 
         return true;
+    }
+
+    protected String getValueFromRow(@Nonnull Map<String, String> row, @Nonnull String columnSpec) throws InvalidSelectorValueException {
+        String value = row.get(columnSpec);
+        if (value == null) {
+            throw new InvalidSelectorValueException("The column spec " + columnSpec + " of the given selector does not match an exsiting column");
+        }
+        return value;
     }
 
 }

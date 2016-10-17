@@ -84,13 +84,15 @@ public class RowIndexSelector extends AbstractCSVSelector {
         for (Iterator<Map<String, String>> iter = this.csvMap.iterator(); iter.hasNext();) {
             Map<String, String> row = iter.next();
             if (this.isRowSelected(rowIndex)) {
-                result.put(rowIndex, row.get(this.columnSpec));
+                result.put(rowIndex, this.getValueFromRow(row, this.columnSpec));
             }
             rowIndex++;
         }
 
         return result;
     }
+
+
 
     private boolean isRowSelected(int rowIndex) {
         return this.allRowIndexes || this.selectedRowIndexList.contains(rowIndex);

@@ -77,7 +77,7 @@ public class RegExpRowSelector extends AbstractCSVSelector {
             Map<String, String> row = iter.next();
             String colSelectorValue = row.get(this.columnIdentifier);
             if (this.columnRegExp.matcher(colSelectorValue).matches()) {
-                result.put(rowIndex, row.get(this.columnSpec));
+                result.put(rowIndex, this.getValueFromRow(row, this.columnSpec));
             }
             rowIndex++;
         }
