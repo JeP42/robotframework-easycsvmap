@@ -59,7 +59,7 @@ public abstract class AbstractCSVSelector implements CSVSelector {
         return true;
     }
 
-    protected String getValueFromRow(@Nonnull Map<String, String> row, @Nonnull String columnSpec) throws InvalidSelectorValueException {
+    protected String getValueFromRow(@Nonnull Map<String, String> row, @Nonnull String columnSpec) {
         String value = row.get(columnSpec);
         if (value == null) {
             throw new InvalidSelectorValueException("The column spec " + columnSpec + " of the given selector does not match an exsiting column");
