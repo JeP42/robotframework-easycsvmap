@@ -20,4 +20,8 @@ public final class CSVMapUtil {
         return str.substring(1, str.length() - 1);
     }
 
+    public static boolean isEmpty(String str) {
+        return str == null || "".equals(str);
+    }
+
 }

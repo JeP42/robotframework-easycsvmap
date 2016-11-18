@@ -19,6 +19,7 @@ import net.easycsv.easycsvmap.csv.CSVFileReader;
 import net.easycsv.easycsvmap.csv.CSVFileWriter;
 import net.easycsv.easycsvmap.selector.CSVSelector;
 import net.easycsv.easycsvmap.selector.CSVSelectorFactory;
+import net.easycsv.easycsvmap.util.CSVMapUtil;
 import net.easycsv.easycsvmap.util.FileUtil;
 
 /**
@@ -26,7 +27,7 @@ import net.easycsv.easycsvmap.util.FileUtil;
  */
 public class EasyCSVMap {
 
-    private static final String UNEXPECTED_EXCEPTION_MESSAGE = "An unexpected exception occured. See stacktrace for details about the root cause.";
+    private static final String UNEXPECTED_EXCEPTION_MESSAGE = "An unexpected exception occured. See stacktrace for details about the root cause. message: %s";
 
     private CSVContext csvContext;
 
@@ -73,7 +74,7 @@ public class EasyCSVMap {
         try {
             return this.parseCsv(FileUtil.loadFile(csvFilePath));
         } catch (IOException e) {
-            throw new CSVMapException(UNEXPECTED_EXCEPTION_MESSAGE, e);
+            throw new CSVMapException(String.format(UNEXPECTED_EXCEPTION_MESSAGE, e.getMessage()), e);
         }
     }
 
@@ -108,7 +109,7 @@ public class EasyCSVMap {
 
             this.validateHeaderRow();
         } catch (IOException e) {
-            throw new CSVMapException(UNEXPECTED_EXCEPTION_MESSAGE, e);
+            throw new CSVMapException(String.format(UNEXPECTED_EXCEPTION_MESSAGE, e.getMessage()), e);
         } finally {
             this.closeCSVReader(reader);
         }
@@ -162,10 +163,14 @@ public class EasyCSVMap {
             reader = this.getReader(csvString);
             String[] nextRow;
             while ((nextRow = reader.readNextLine()) != null) {
+            	//don't mind about empty lines, ignore them silently...
+            	if (this.isEmptyLine(nextRow)) {
+            		continue;
+            	}
                 this.processDataRow(nextRow);
             }
         } catch (IOException e) {
-            throw new CSVMapException(UNEXPECTED_EXCEPTION_MESSAGE, e);
+            throw new CSVMapException(String.format(UNEXPECTED_EXCEPTION_MESSAGE, e.getMessage()), e);
         } finally {
             this.closeCSVReader(reader);
         }
@@ -173,7 +178,12 @@ public class EasyCSVMap {
         return this.csvMap;
     }
 
-    private void processDataRow(String[] csvRow) {
+    private boolean isEmptyLine(String[] row) {
+		//for an empty line the OpenCSV reader returns an array with one empty element
+		return row.length == 1 && CSVMapUtil.isEmpty(row[0]);
+	}
+
+	private void processDataRow(String[] csvRow) {
 
         this.validateDataRow(csvRow);
 
@@ -244,6 +254,17 @@ public class EasyCSVMap {
 
         csvSelector.setValues(value);
     }
+
+	/**
+	 * An iterator over the rows of the CSV file, including a potentially existing header line.
+	 *
+	 * @return
+	 */
+    public Iterator<Map<String, String>> getRowIterator() {
+    	return this.csvMap.iterator();
+    }
+
+
 
     /**
      * Writes the CSV structure to file
