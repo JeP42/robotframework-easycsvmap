@@ -6,6 +6,17 @@
     <artifactId>robotframework-easycsvmap</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
+	<name>robotframework-easycsvmap</name>
+	<description>Robot framework keywords to read/write values of CSV file</description>
+	<url>https://github.com/JeP42/robotframework-easycsvmap</url>
+
+	<licenses>
+	  <license>
+	    <name>The Apache License, Version 2.0</name>
+	    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+	  </license>
+	</licenses>
+
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
@@ -66,8 +77,8 @@
 
 	<scm>
         <url>https://github.com/JeP42/robotframework-easycsvmap</url>
-        <connection>scm:git:git@github.com:jep42/robotframework-easycsvmap.git</connection>
-        <developerConnection>scm:git:git@github.com:jep42/robotframework-easycsvmap.git</developerConnection>
+        <connection>scm:git:git://github.com/jep42/robotframework-easycsvmap.git</connection>
+        <developerConnection>scm:git:ssh://github.com:jep42/robotframework-easycsvmap.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
@@ -75,5 +86,12 @@
         <url>https://github.com/JeP42/robotframework-easycsvmap</url>
     </issueManagement>
 
+	<developers>
+	    <developer>
+	      <name>Jens P</name>
+	      <email>jep0042@gmail.com</email>
+	      <organizationUrl>https://github.com/JeP42</organizationUrl>
+	    </developer>
+  	</developers>
 
 </project>
