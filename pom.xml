@@ -64,4 +64,16 @@
 
     </dependencies>
 
+	<scm>
+        <url>https://github.com/JeP42/robotframework-easycsvmap</url>
+        <connection>scm:git:git@github.com:jep42/robotframework-easycsvmap.git</connection>
+        <developerConnection>scm:git:git@github.com:jep42/robotframework-easycsvmap.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+        <url>https://github.com/JeP42/robotframework-easycsvmap</url>
+    </issueManagement>
+
+
 </project>
