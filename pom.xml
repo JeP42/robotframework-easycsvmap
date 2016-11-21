@@ -3,7 +3,7 @@
 
     <groupId>com.github.jep42</groupId>
     <artifactId>robotframework-easycsvmap</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
 
 	<name>robotframework-easycsvmap</name>
 	<description>Robot framework keywords to read/write values of CSV file</description>
@@ -104,7 +104,7 @@
         <url>https://github.com/JeP42/robotframework-easycsvmap</url>
         <connection>scm:git:git@github.com:JeP42/robotframework-easycsvmap.git</connection>
         <developerConnection>scm:git:git@github.com:JeP42/robotframework-easycsvmap.git</developerConnection>
-        <tag>robotframework-easycsvmap-0.0.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
