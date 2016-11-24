@@ -33,7 +33,6 @@
                     <target>1.7</target>
 				</configuration>
 			</plugin>
-
 			<plugin>
 		        <groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
@@ -41,7 +40,6 @@
 					<additionalparam>-Xdoclint:none</additionalparam>
 				</configuration>
 		    </plugin>
-
         </plugins>
 
         <pluginManagement>
@@ -59,17 +57,20 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-
     </build>
 
 
     <dependencies>
-
         <dependency>
             <groupId>org.robotframework</groupId>
             <artifactId>javalib-core</artifactId>
-            <version>1.1</version>
+            <version>1.2.1</version>
         </dependency>
+        <dependency>
+			<groupId>com.github.ombre42</groupId>
+			<artifactId>jrobotremoteserver</artifactId>
+			<version>3.0</version>
+		</dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

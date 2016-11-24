@@ -1,4 +1,4 @@
-package com.github.jep42.easycsvmap.robot;
+package com.github.jep42.roboteasycsv.keywords;
 
 import static org.junit.Assert.assertEquals;
 
