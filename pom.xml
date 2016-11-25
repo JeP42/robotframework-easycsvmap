@@ -2,10 +2,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.jep42</groupId>
-    <artifactId>robotframework-easycsvmap</artifactId>
+    <artifactId>robotframework-easycsvmap-reactor</artifactId>
     <version>0.0.2-SNAPSHOT</version>
 
-	<name>robotframework-easycsvmap</name>
+    <packaging>pom</packaging>
+
+	<name>robotframework-easycsvmap-reactor</name>
 	<description>Robot framework keywords to read/write values of CSV file</description>
 	<url>https://github.com/JeP42/robotframework-easycsvmap</url>
 
@@ -22,28 +24,31 @@
 		<version>9</version>
 	</parent>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.0</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-				</configuration>
-			</plugin>
-			<plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<additionalparam>-Xdoclint:none</additionalparam>
-				</configuration>
-		    </plugin>
-        </plugins>
+    <modules>
+            <module>easycsvmap</module>
+            <module>remoteserver</module>
+    </modules>
 
+    <build>
         <pluginManagement>
 			<plugins>
+				<plugin>
+	                <groupId>org.apache.maven.plugins</groupId>
+	                <artifactId>maven-compiler-plugin</artifactId>
+	                <version>3.0</version>
+	                <configuration>
+	                    <source>1.7</source>
+	                    <target>1.7</target>
+					</configuration>
+				</plugin>
+				<plugin>
+			        <groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<configuration>
+						<additionalparam>-Xdoclint:none</additionalparam>
+					</configuration>
+			    </plugin>
+
 				<!-- override version of GPG plugin to use new GPG signing features -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -60,7 +65,8 @@
     </build>
 
 
-    <dependencies>
+    <dependencyManagement>
+        <dependencies>
         <dependency>
             <groupId>org.robotframework</groupId>
             <artifactId>javalib-core</artifactId>
@@ -98,8 +104,8 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.21</version>
         </dependency>
-
-    </dependencies>
+        </dependencies>
+    </dependencyManagement>
 
 	<scm>
         <url>https://github.com/JeP42/robotframework-easycsvmap</url>

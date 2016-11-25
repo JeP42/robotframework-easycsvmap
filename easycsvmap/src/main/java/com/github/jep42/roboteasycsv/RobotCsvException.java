@@ -1,4 +1,4 @@
-package com.github.jep42.roboteasycsv.keywords;
+package com.github.jep42.roboteasycsv;
 
 
 public class RobotCsvException extends RuntimeException {

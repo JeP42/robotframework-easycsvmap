@@ -1,9 +1,7 @@
-package com.github.jep42.roboteasycsv.remoteserver;
+package com.github.jep42.roboteasycsv;
 
 
 import org.robotframework.remoteserver.RemoteServer;
-
-import com.github.jep42.roboteasycsv.keywords.RobotEasyCsv;
 
 public class EasyCsvRobotRemoteServer {
 
