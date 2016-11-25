@@ -14,7 +14,7 @@ use it with Python the library has to be imported as remote library (refer to th
 
 #### Jython
 
-- download latest robotframework-easycsvmap-jar (robotframework-easycsvmap-0.0.1.jar)
+- download latest robotframework-easycsvmap-jar ([robotframework-easycsvmap-0.0.2.jar](https://repo.maven.apache.org/maven2/com/github/jep42/robotframework-easycsvmap/0.0.2/robotframework-easycsvmap-0.0.2.jar))
 - add the jar to classpath (as well as its dependencies)
 - import the library
 
@@ -25,7 +25,7 @@ Library    com.github.jep42.roboteasycsv.RobotEasyCsv
 
 #### Remote Library Server
 
-- download the remote-server-jar (robotframework-easycsvmap-remoteserver-0.0.1-jar-with-dependencies.jar)
+- download the remote-server-jar ([robotframework-easycsvmap-remoteserver-0.0.2-jar-with-dependencies.jar](https://repo.maven.apache.org/maven2/com/github/jep42/robotframework-easycsvmap-remoteserver/0.0.2/robotframework-easycsvmap-remoteserver-0.0.2-jar-with-dependencies.jar))
 - start it via command line ``java -jar <remote-server-jar> --port 8270``
 - import the library
 
