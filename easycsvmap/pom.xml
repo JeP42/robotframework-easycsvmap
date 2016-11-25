@@ -36,10 +36,6 @@
             <artifactId>javalib-core</artifactId>
         </dependency>
         <dependency>
-			<groupId>com.github.ombre42</groupId>
-			<artifactId>jrobotremoteserver</artifactId>
-		</dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>

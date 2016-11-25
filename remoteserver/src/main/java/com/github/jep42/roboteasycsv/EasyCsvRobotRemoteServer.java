@@ -5,7 +5,7 @@ import org.robotframework.remoteserver.RemoteServer;
 
 public class EasyCsvRobotRemoteServer {
 
-	private static final String PATH = "/EasyCSVLibrary";
+	private static final String PATH = "/RobotEasyCsv";
 
 	private static int PORT = 8270;
 
