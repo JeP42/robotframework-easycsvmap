@@ -36,6 +36,51 @@ Library    com.github.jep42.roboteasycsv.RobotEasyCsv
 Library    Remote    http://localhost:8270/RobotEasyCsv
 ```
 
+
+####Robot Testcase
+
+Assume a CSV file ``${TEMPDIR}/userdata.csv`` with the following content:
+
+```
+firstname;lastname;email;sex
+Peter;Pan;peterpan@neverland.com;male
+Tinker;Bell;tb@neverland.net;female
+James;Hook;captainhook@pirates.com;male
+```
+
+#####Reading CSV values
+
+A common scenario is to read values from a CSV (e.g. to perform checks on it).
+
+
+```
+*** Test Cases ***
+Check CSV Values
+    ...
+    Parse Csv From File    ${TEMPDIR}/userdata.csv    0
+    {name}=    Get First Csv Value    {1}.lastname
+    Should Be Equal 	${name} 	Pan
+    {name}=    Get First Csv Value    {2}.lastname
+    Should Be Equal 	${name} 	Bell
+    ...
+```
+
+#####Changing CSV values
+
+Another common scenario is to change values of a CSV (e.g. to test upload/download scenarios).
+
+```
+*** Test Cases ***
+Change CSV Values
+    ...
+    Parse Csv From File    ${TEMPDIR}/userdata.csv    0
+    Set Csv Values    {1}.email    peterp@neverland.net
+    Set Csv Values    [email=^captain.*$].firstname    LittleJames
+    Save Csv To File    ${TEMPDIR}/userdata_updated.csv
+    ...
+```
+
+
 ### Dependencies
 - org.robotframework:javalib-core:1.2.1 ([Download](https://mvnrepository.com/artifact/org.robotframework/javalib-core/1.2.1) from Maven Central)
 - net.sf.opencsv:opencsv:2.3 ([Download](https://mvnrepository.com/artifact/net.sf.opencsv/opencsv/2.3) from Maven Central)
