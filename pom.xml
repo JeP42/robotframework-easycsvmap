@@ -49,7 +49,6 @@
 					</configuration>
 			    </plugin>
 
-				<!-- override version of GPG plugin to use new GPG signing features -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-gpg-plugin</artifactId>
