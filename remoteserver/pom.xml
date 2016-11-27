@@ -24,7 +24,7 @@
 				  <configuration>
 				    <archive>
 				      <manifest>
-				        <mainClass>com.github.jep42.roboteasycsv.remoteserver.EasyCsvRobotRemoteServer</mainClass>
+				        <mainClass>com.github.jep42.roboteasycsv.EasyCsvRobotRemoteServer</mainClass>
 				      </manifest>
 				    </archive>
 				    <descriptorRefs>
