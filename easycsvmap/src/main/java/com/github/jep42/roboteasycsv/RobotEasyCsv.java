@@ -25,6 +25,7 @@ import com.github.jep42.easycsvmap.EasyCSVMap;
  * | *Selector* | *Comment* |
  * | ``{2}.name`` | If a header row was specified then columns can be accessed via their names. Hence, this expression would find the value of column 'name' of the third row in the CSV. |
  * | ``{*}.name`` | The row selector supports wildcard, so this expression would select all rows and therefore finds all values of column 'name' |
+ * | ``{2,3,4}.name`` | A list of row indexes can be used to select particular rows by index. This expression would select column 'name' of rows with index 2, 3 and 4 |
  * | ``{2}.10`` | If no header row was specified then the column has to be selected via its index. Therefore, this expression would find the value of 11th column of the third row in the CSV. |
  * | ``[city=^Ka.*$].name`` | The row selector supports regular expressions to select lines with particular values in particular columns. This expression would select all lines with a value starting with "Ka" in the column name' |
  *
@@ -128,6 +129,21 @@ public class RobotEasyCsv {
     public void saveCsvToFile(String filePath) {
         this.checkInitialized();
         this.easyCsvMap.saveToFile(filePath);
+    }
+
+    /**
+     * Add a row to CSV.
+     *
+     * Arguments:
+	 * - _values_: The values of the new row
+	 *
+	 * Example:
+	 * | Add Row | col1value | col2value | col3value |
+	 *
+     */
+    public void addRow(String... values) {
+        this.checkInitialized();
+        this.easyCsvMap.addRow(values);
     }
 
 }

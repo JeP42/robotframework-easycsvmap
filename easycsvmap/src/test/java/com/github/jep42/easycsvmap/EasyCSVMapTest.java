@@ -8,6 +8,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import com.github.jep42.easycsvmap.core.CSVContext;
+import com.github.jep42.easycsvmap.core.CSVMapException;
 
 public class EasyCSVMapTest {
 
@@ -145,7 +146,7 @@ public class EasyCSVMapTest {
         EasyCSVMap csvMap = new EasyCSVMap();
         String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
         csvMap.parseCsvFromFile(csvFilePath);
-        assertEquals(4, csvMap.getNumberOfCSVColumns());
+        assertEquals(3, csvMap.getNumberOfCSVColumns());
     }
 
     @Test
@@ -187,6 +188,42 @@ public class EasyCSVMapTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    public void addRow() {
+    	EasyCSVMap csvMap = new EasyCSVMap(0);
+        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        String[] values= new String[]{"datacol0-line5", "datacol1-line5", "datacol2-line5"};
+        csvMap.addRow(values);
+
+        //five data rows + one header row + new row
+        assertEquals(7, csvMap.getNumberOfCSVRows());
+        assertEquals("datacol0-line5", csvMap.getValues("{6}.Col0-Header").values().iterator().next());
+        assertEquals("datacol1-line5", csvMap.getValues("{6}.Col1-Header").values().iterator().next());
+        assertEquals("datacol2-line5", csvMap.getValues("{6}.Col2-Header").values().iterator().next());
+    }
+
+    @Test(expected = CSVMapException.class)
+    public void addRow_tooManyArgs() {
+    	EasyCSVMap csvMap = new EasyCSVMap(0);
+        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        String[] values= new String[]{"datacol0-line5", "datacol1-line5", "datacol2-line5", "datacol3-line5"};
+        csvMap.addRow(values);
+    }
+
+    @Test(expected = CSVMapException.class)
+    public void addRow_notEnoughArgs() {
+    	EasyCSVMap csvMap = new EasyCSVMap(0);
+        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        String[] values= new String[]{"datacol0-line5", "datacol1-line5"};
+        csvMap.addRow(values);
     }
 
 

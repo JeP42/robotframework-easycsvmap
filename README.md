@@ -67,7 +67,7 @@ Check CSV Values
 
 #####Changing CSV values
 
-Another common scenario is to change values of a CSV (e.g. to test upload/download scenarios).
+Another common scenario is to change values of a CSV (e.g. to test upload/download scenarios) or to add rows.
 
 ```
 *** Test Cases ***
@@ -76,6 +76,7 @@ Change CSV Values
     Parse Csv From File    ${TEMPDIR}/userdata.csv    0
     Set Csv Values    {1}.email    peterp@neverland.net
     Set Csv Values    [email=^captain.*$].firstname    LittleJames
+    Add Row    Wendy    Darling    wendy@home.com    female
     Save Csv To File    ${TEMPDIR}/userdata_updated.csv
     ...
 ```

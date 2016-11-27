@@ -200,6 +200,7 @@ public class EasyCSVMap {
      * A row is considered to be invalid if the number of columns differs from the number of columns of the header row
      *
      * @param csvRow
+     * @throws CSVMapException Thrown if the number of elements in the given array does not match the number of header rows
      */
     private void validateDataRow(String[] csvRow) {
         if (csvRow.length != this.headerRow.size()) {
@@ -220,9 +221,9 @@ public class EasyCSVMap {
     /**
      * Convenient method to retrieve the value of particular cells from the CSV structure. These cells can be selected via a selector expression.
      * The syntax of the selector expression is <b>&lt;rowSpecification&gt;.&lt;columnName&gt;|&lt;columnIndex&gt;</b> Examples:
-     * <ul><li><b>2.name</b> => if a header row was specified then the columns can be access via its name. Hence, this expression would find the value of column 'name' of the third
+     * <ul><li><b>{2}.name</b> => if a header row was specified then the columns can be access via its name. Hence, this expression would find the value of column 'name' of the third
      * row in the CSV (numeric row specification indicates a row index).</li>
-     * <li><b>2.10</b> => if no header row was explicitly specified then the columns have to be accessed via index. Hence, this expression would find the value of the eleventh
+     * <li><b>{2}.10</b> => if no header row was explicitly specified then the columns have to be accessed via index. Hence, this expression would find the value of the eleventh
      * column of the third row in the CSV.</li>
      * <p>
      * Beside simply using numeric row specifications it is also possible to use more complex ones, e.g. search a row via comparing column values with regular expressions.
@@ -263,7 +264,15 @@ public class EasyCSVMap {
     	return this.csvMap.iterator();
     }
 
-
+    /**
+     * Append a new row to the end of the CSV.
+     *
+     * @param values Column values from left to right
+     * @throws CSVMapException Thrown if the number of elements in the given array does not match the number of header rows
+     */
+    public void addRow(String... values) {
+    	this.processDataRow(values);
+    }
 
     /**
      * Writes the CSV structure to file
