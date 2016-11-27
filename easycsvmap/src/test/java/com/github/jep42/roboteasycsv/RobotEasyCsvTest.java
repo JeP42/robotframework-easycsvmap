@@ -86,6 +86,20 @@ public class RobotEasyCsvTest {
         assertEquals("datacol0-line0", v);
     }
 
+    @Test
+    public void addRow() {
+        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+
+        RobotEasyCsv easyCsv = new RobotEasyCsv();
+        easyCsv.parseCsvFromFile(csvFilePath, 0);
+        easyCsv.addRow("Wendy", "Darling", "wendy@home.com");
+
+        // intention of this test is to verify the robot keyword, actually not the underlying CSVMap. Hence this easy test is sufficient...
+        String v = easyCsv.getFirstCsvValue("{6}.Col0-Header");
+
+        assertEquals("Wendy", v);
+    }
+
     @Test(expected = RobotCsvException.class)
     public void setCsvValues_NotInitialized() {
         new RobotEasyCsv().setCsvValues("blub", "42");
