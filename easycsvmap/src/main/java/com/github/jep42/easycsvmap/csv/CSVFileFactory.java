@@ -2,6 +2,11 @@ package com.github.jep42.easycsvmap.csv;
 
 import java.io.IOException;
 
+import com.github.jep42.easycsvmap.csv.api.CSVFileReader;
+import com.github.jep42.easycsvmap.csv.api.CSVFileWriter;
+import com.github.jep42.easycsvmap.csv.impl.OpenCSVReader;
+import com.github.jep42.easycsvmap.csv.impl.OpenCSVWriter;
+
 public final class CSVFileFactory {
 
     private CSVFileFactory() {

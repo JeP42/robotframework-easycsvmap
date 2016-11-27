@@ -142,11 +142,11 @@ public class EasyCSVMapTest {
     }
 
     @Test
-    public void getNumberOfCSVColumns_separatorLastChar() {
-        EasyCSVMap csvMap = new EasyCSVMap();
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+    public void parseCsv_emptyLines() {
+        EasyCSVMap csvMap = new EasyCSVMap(0);
+        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines_emptyRows.csv").getFile();
         csvMap.parseCsvFromFile(csvFilePath);
-        assertEquals(3, csvMap.getNumberOfCSVColumns());
+        assertEquals(6, csvMap.getNumberOfCSVRows());
     }
 
     @Test

@@ -1,7 +1,9 @@
-package com.github.jep42.easycsvmap.csv;
+package com.github.jep42.easycsvmap.csv.impl;
 
 import java.io.FileWriter;
 import java.io.IOException;
+
+import com.github.jep42.easycsvmap.csv.api.CSVFileWriter;
 
 import au.com.bytecode.opencsv.CSVWriter;
 

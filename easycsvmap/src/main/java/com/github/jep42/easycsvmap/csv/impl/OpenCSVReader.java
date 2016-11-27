@@ -1,7 +1,9 @@
-package com.github.jep42.easycsvmap.csv;
+package com.github.jep42.easycsvmap.csv.impl;
 
 import java.io.IOException;
 import java.io.StringReader;
+
+import com.github.jep42.easycsvmap.csv.api.CSVFileReader;
 
 import au.com.bytecode.opencsv.CSVReader;
 

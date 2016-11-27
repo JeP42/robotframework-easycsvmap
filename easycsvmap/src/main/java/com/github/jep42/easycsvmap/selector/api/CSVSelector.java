@@ -1,4 +1,4 @@
-package com.github.jep42.easycsvmap.selector;
+package com.github.jep42.easycsvmap.selector.api;
 
 import java.util.List;
 import java.util.Map;

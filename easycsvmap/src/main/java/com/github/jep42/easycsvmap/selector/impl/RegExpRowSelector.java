@@ -1,4 +1,4 @@
-package com.github.jep42.easycsvmap.selector;
+package com.github.jep42.easycsvmap.selector.impl;
 
 import java.util.Iterator;
 import java.util.List;
@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
 import com.github.jep42.easycsvmap.core.CSVContext;
 import com.github.jep42.easycsvmap.core.CSVMapException;
 import com.github.jep42.easycsvmap.core.InvalidSelectorFormatException;
+import com.github.jep42.easycsvmap.selector.api.AbstractCSVSelector;
 import com.github.jep42.easycsvmap.util.CSVMapUtil;
 
 

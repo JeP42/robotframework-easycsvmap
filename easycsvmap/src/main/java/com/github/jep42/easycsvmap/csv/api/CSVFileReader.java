@@ -1,4 +1,4 @@
-package com.github.jep42.easycsvmap.csv;
+package com.github.jep42.easycsvmap.csv.api;
 
 import java.io.IOException;
 

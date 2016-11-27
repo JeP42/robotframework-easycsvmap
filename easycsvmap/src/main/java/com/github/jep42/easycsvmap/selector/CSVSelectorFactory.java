@@ -5,6 +5,9 @@ import java.util.Map;
 
 import com.github.jep42.easycsvmap.core.CSVContext;
 import com.github.jep42.easycsvmap.core.CSVMapException;
+import com.github.jep42.easycsvmap.selector.api.CSVSelector;
+import com.github.jep42.easycsvmap.selector.impl.RegExpRowSelector;
+import com.github.jep42.easycsvmap.selector.impl.RowIndexSelector;
 
 public final class CSVSelectorFactory {
 

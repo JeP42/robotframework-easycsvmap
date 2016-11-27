@@ -15,10 +15,10 @@ import javax.annotation.Nonnull;
 import com.github.jep42.easycsvmap.core.CSVContext;
 import com.github.jep42.easycsvmap.core.CSVMapException;
 import com.github.jep42.easycsvmap.csv.CSVFileFactory;
-import com.github.jep42.easycsvmap.csv.CSVFileReader;
-import com.github.jep42.easycsvmap.csv.CSVFileWriter;
-import com.github.jep42.easycsvmap.selector.CSVSelector;
+import com.github.jep42.easycsvmap.csv.api.CSVFileReader;
+import com.github.jep42.easycsvmap.csv.api.CSVFileWriter;
 import com.github.jep42.easycsvmap.selector.CSVSelectorFactory;
+import com.github.jep42.easycsvmap.selector.api.CSVSelector;
 import com.github.jep42.easycsvmap.util.CSVMapUtil;
 import com.github.jep42.easycsvmap.util.FileUtil;
 

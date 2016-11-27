@@ -1,4 +1,4 @@
-package com.github.jep42.easycsvmap.selector;
+package com.github.jep42.easycsvmap.selector.impl;
 
 import com.github.jep42.easycsvmap.core.InvalidSelectorFormatException;
 

@@ -1,4 +1,4 @@
-package com.github.jep42.easycsvmap.selector;
+package com.github.jep42.easycsvmap.selector.impl;
 
 import com.github.jep42.easycsvmap.core.InvalidSelectorFormatException;
 import com.github.jep42.easycsvmap.util.CSVMapUtil;
@@ -12,7 +12,7 @@ public class RowIndexFormatValidator {
     }
 
     /**
-     * Format of a valid row specification is {rowIndex|rowIndexList} (TODO |rowIndexRange)
+     * Format of a valid row specification is {rowIndex|rowIndexList}
      * .
      * If list contains just one element this may be the WILDCARD character, otherwise all list items
      * must be valid integers.
