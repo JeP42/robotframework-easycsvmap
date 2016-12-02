@@ -1,6 +1,8 @@
-[![Build Status](https://travis-ci.org/JeP42/robotframework-easycsvmap.svg?branch=master)](https://travis-ci.org/JeP42/robotframework-easycsvmap) [!
+[![Build Status](https://travis-ci.org/JeP42/robotframework-easycsvmap.svg?branch=master)](https://travis-ci.org/JeP42/robotframework-easycsvmap)
 [![codecov](https://codecov.io/gh/JeP42/robotframework-easycsvmap/branch/master/graph/badge.svg)](https://codecov.io/gh/JeP42/robotframework-easycsvmap)
-[Quality Gate](https://sonarqube.com/api/badges/gate?key=com.github.jep42:robotframework-easycsvmap-reactor)](https://sonarqube.com/dashboard/index/com.github.jep42:robotframework-easycsvmap-reactor)
+[![Quality Gate](https://sonarqube.com/api/badges/gate?key=com.github.jep42:robotframework-easycsvmap-reactor)](https://sonarqube.com/dashboard/index/com.github.jep42:robotframework-easycsvmap-reactor)
+
+
 
 ## robotframework-easycsvmap
 
