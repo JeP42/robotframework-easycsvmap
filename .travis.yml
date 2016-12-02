@@ -18,3 +18,5 @@ cache:
 notifications:
   email:
     - jep0042@gmail.com
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
