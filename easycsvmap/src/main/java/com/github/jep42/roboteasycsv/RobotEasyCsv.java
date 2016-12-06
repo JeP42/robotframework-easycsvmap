@@ -107,7 +107,7 @@ public class RobotEasyCsv {
 	 * - _selector_: a valid CSV selector expression
 	 *
 	 * Example:
-	 * | &{name}= | Parse Csv From File | [city=^Karlsruhe*$].name |
+	 * | &{name}= | Get All Csv Values | [city=^Karlsruhe*$].name |
 	 *
      */
     public List<String> getAllCsvValues(String selector) {
