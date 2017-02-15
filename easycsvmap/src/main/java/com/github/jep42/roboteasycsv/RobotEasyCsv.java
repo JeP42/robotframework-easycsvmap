@@ -34,7 +34,7 @@ public class RobotEasyCsv {
 
 	public static final String ROBOT_LIBRARY_VERSION = "0.1";
 
-    public static final String ROBOT_LIBRARY_SCOPE = "GLOBAL";
+    public static final String ROBOT_LIBRARY_SCOPE = "TEST SUITE";
 
     private EasyCSVMap easyCsvMap;
 
