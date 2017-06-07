@@ -3,6 +3,8 @@ package com.github.jep42.roboteasycsv;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.github.jep42.easycsvmap.EasyCSVMap;
 
@@ -32,66 +34,72 @@ import com.github.jep42.easycsvmap.EasyCSVMap;
  */
 public class RobotEasyCsv {
 
-	public static final String ROBOT_LIBRARY_VERSION = "0.1";
+	public static final String ROBOT_LIBRARY_VERSION = "0.2";
 
-    public static final String ROBOT_LIBRARY_SCOPE = "TEST SUITE";
+	//ROBOT_LIBRARY_SCOPE is actually not supported for java remote libraries, scope is always GLOBAL in such a scenario...
+    public static final String ROBOT_LIBRARY_SCOPE = "GLOBAL";
 
-    private EasyCSVMap easyCsvMap;
+    private Map<Integer, EasyCSVMap> csvMaps = new ConcurrentHashMap<Integer, EasyCSVMap>();
 
 
     /**
-     * Parse a CSV file from the given path
+     * Parse a CSV file from the given path and creates a new CSV session object identified by the given Session ID.
+     * The Session ID has to be unique and is used in subsequent calls to specify the CSV session.
      *
      * Arguments:
+	 * - _sessionId_: unique ID for new CSV session
 	 * - _pathToCsv_: path to the CSV file
      * - _headerLineIndex_: the line index of the header line within CSV. Set to -1 if no header line exists.
      *
      * Example:
-	 * | Parse Csv From File | {TEMPDIR}/download.csv | 0 |
+	 * | Parse Csv From File | 4711 | {TEMPDIR}/download.csv | 0 |
 	 *
      */
-    public void parseCsvFromFile(String pathToCsv, int headerLineIndex) {
-        this.easyCsvMap = new EasyCSVMap(headerLineIndex);
-        this.easyCsvMap.parseCsvFromFile(pathToCsv);
+    public void parseCsvFromFile(Integer sessionId, String pathToCsv, int headerLineIndex) {
+        EasyCSVMap easyCSVMap = new EasyCSVMap(headerLineIndex);
+        easyCSVMap.parseCsvFromFile(pathToCsv);
+        this.csvMaps.put(sessionId, easyCSVMap);
     }
 
     /**
      * Set the value of a the cell(s) matching the given selector expression.
      *
      * Arguments:
+     * - _sessionId_:  ID of a previously created CSV session
 	 * - _selector_: a valid CSV selector expression
 	 * - _value_: the value to be set
 	 *
 	 * Example:
-	 * | Set Csv Values | {1}.name | Peter Pan |
+	 * | Set Csv Values | 4711 | {1}.name | Peter Pan |
 	 *
      */
-    public void setCsvValues(String selector, String value) {
-        this.checkInitialized();
-        this.easyCsvMap.setValues(selector, value);
+    public void setCsvValues(Integer sessionId, String selector, String value) {
+        this.checkInitialized(sessionId);
+        this.csvMaps.get(sessionId).setValues(selector, value);
     }
 
-    private void checkInitialized() {
-        if (this.easyCsvMap == null) {
-            throw new RobotCsvException("EasyCsv has to be initialized via parseCsvFromFile first");
-        }
+    private void checkInitialized(Integer sessionId) {
+    	 if (this.csvMaps.get(sessionId) == null) {
+    		 throw new RobotCsvException(String.format("EasyCSV was not properly initialized for the given session ID %s", sessionId));
+    	 }
     }
 
     /**
      * Get the value of the first cell matching the given selector expression.
      *
      * Arguments:
+     * - _sessionId_:  ID of a previously created CSV session
 	 * - _selector_: a valid CSV selector expression
 	 *
 	 * Example:
-	 * | {name}= | Get First Csv Value | {1}.name |
+	 * | {name}= | Get First Csv Value | 4711 | {1}.name |
 	 *
      */
-    public String getFirstCsvValue(String selector) {
-        this.checkInitialized();
+    public String getFirstCsvValue(Integer sessionId, String selector) {
+        this.checkInitialized(sessionId);
 
         // cannot return Map to robot, so just return the value
-        Iterator<String> it = this.easyCsvMap.getValues(selector).values().iterator();
+        Iterator<String> it = this.csvMaps.get(sessionId).getValues(selector).values().iterator();
         if (it.hasNext()) {
             return it.next();
         } else {
@@ -104,46 +112,64 @@ public class RobotEasyCsv {
      * The keyword returns list of values without further information about the corresponding source cells.
      *
      * Arguments:
+     * - _sessionId_:  ID of a previously created CSV session
 	 * - _selector_: a valid CSV selector expression
 	 *
 	 * Example:
-	 * | &{name}= | Get All Csv Values | [city=^Karlsruhe*$].name |
+	 * | &{name}= | Get All Csv Values | 4711 | [city=^Karlsruhe*$].name |
 	 *
      */
-    public List<String> getAllCsvValues(String selector) {
-        this.checkInitialized();
+    public List<String> getAllCsvValues(Integer sessionId, String selector) {
+        this.checkInitialized(sessionId);
         // cannot return Map to robot, so just return the values
-        return new ArrayList<>(this.easyCsvMap.getValues(selector).values());
+        return new ArrayList<>(this.csvMaps.get(sessionId).getValues(selector).values());
     }
 
     /**
      * Save the CSV to file.
      *
      * Arguments:
+     * - _sessionId_:  ID of a previously created CSV session
 	 * - _filePath_: target path to the CSV file
 	 *
 	 * Example:
-	 * | Save Csv To File | {TEMPDIR}/myFile.csv |
+	 * | Save Csv To File | 4711 | {TEMPDIR}/myFile.csv |
 	 *
      */
-    public void saveCsvToFile(String filePath) {
-        this.checkInitialized();
-        this.easyCsvMap.saveToFile(filePath);
+    public void saveCsvToFile(Integer sessionId, String filePath) {
+        this.checkInitialized(sessionId);
+        this.csvMaps.get(sessionId).saveToFile(filePath);
     }
 
     /**
      * Add a row to CSV.
      *
      * Arguments:
+     * - _sessionId_:  ID of a previously created CSV session
 	 * - _values_: The values of the new row
 	 *
 	 * Example:
-	 * | Add Row | col1value | col2value | col3value |
+	 * | Add Row | 4711 | col1value | col2value | col3value |
 	 *
      */
-    public void addRow(String... values) {
-        this.checkInitialized();
-        this.easyCsvMap.addRow(values);
+    public void addRow(Integer sessionId, String... values) {
+        this.checkInitialized(sessionId);
+        this.csvMaps.get(sessionId).addRow(values);
+    }
+
+    /**
+     * Removes the CSV session identified by the given session ID.
+     *
+     * Arguments:
+     * - _sessionId_:  ID of a previously created CSV session
+	 *
+	 * Example:
+	 * | Remove CSV Session | 4711 |
+	 *
+     */
+    public void removeCsvSession(Integer sessionId) {
+        this.checkInitialized(sessionId);
+        this.csvMaps.remove(sessionId);
     }
 
 }
