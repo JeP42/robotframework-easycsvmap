@@ -22,7 +22,7 @@ Java remote server implementation jrobotremoteserver does not support different 
 
 #### Jython
 
-- download latest robotframework-easycsvmap-jar ([robotframework-easycsvmap-0.0.2.jar](https://repo.maven.apache.org/maven2/com/github/jep42/robotframework-easycsvmap/0.0.2/robotframework-easycsvmap-0.0.2.jar))
+- download latest robotframework-easycsvmap-jar ([robotframework-easycsvmap-x.x.x.jar](https://repo.maven.apache.org/maven2/com/github/jep42/robotframework-easycsvmap))
 - add the jar to classpath (as well as its dependencies)
 - import the library
 
@@ -33,7 +33,7 @@ Library    com.github.jep42.roboteasycsv.RobotEasyCsv
 
 #### Remote Library Server
 
-- download the remote-server-jar ([robotframework-easycsvmap-remoteserver-0.0.2-jar-with-dependencies.jar](https://repo.maven.apache.org/maven2/com/github/jep42/robotframework-easycsvmap-remoteserver/0.0.2/robotframework-easycsvmap-remoteserver-0.0.2-jar-with-dependencies.jar))
+- download the remote-server-jar ([robotframework-easycsvmap-remoteserver-x.x.x-jar-with-dependencies.jar](https://repo.maven.apache.org/maven2/com/github/jep42/robotframework-easycsvmap-remoteserver))
 - start it via command line ``java -jar <remote-server-jar> --port 8270``
 - import the library
 
