@@ -3,7 +3,7 @@
 
     <groupId>com.github.jep42</groupId>
     <artifactId>robotframework-easycsvmap-reactor</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -129,7 +129,7 @@
         <url>https://github.com/JeP42/robotframework-easycsvmap</url>
         <connection>scm:git:git@github.com:JeP42/robotframework-easycsvmap.git</connection>
         <developerConnection>scm:git:git@github.com:JeP42/robotframework-easycsvmap.git</developerConnection>
-        <tag>robotframework-easycsvmap-reactor-0.0.3</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
