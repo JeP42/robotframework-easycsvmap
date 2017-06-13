@@ -2,15 +2,15 @@ language: java
 sudo: false
 install: true
 addons:
-  sonarqube: true
-env:
-  global:
-    - secure: 3g5M4KdCXuqzb/hcPs56P+d5UOmg390SCHjO2DhIDKtmg0DZjMpHEukXqieW9GV4b32w/gSNpBw9jxqklwburpyrf5gcW6k66XdlgihvDUq74wfVMORpumNPagYHw9tbxb1WOxRrM721xFkYgujk+UDdd0F/WD94if+80dMwEiN2bJOiQWX3US7QriADsuvMze8I90bLrQ1549SLbpMFxd1iw8EyHQTKBa0oHn9NVDv7BzL6+WtloyPbs3IE1SojOPoxyQyT5AerswaKCIMoSIg9uqO5MpF+Y5QlWqx8JI3117eLesCwyq2t3wfS7x+PAw/oYE39rd3wkCET5Cpg2ZZD6kqAFE1cTtYIM13uAKZKPx7ebmBV17ZQ+cNpwNjZ9BHwSX2l4TfW8Yykp5kRn33LhNU3RmuXq2XYs2YgTgz4mRELSsFDbMQhRtwwF9Yx5gu1fds2ZJJaiFT+e+DzNPULRa0kxS33neLPPF1nkUiQ4L7DnOmFW4rFV1X8Z5KSnan4ulLRGorwu6zfIzeIfLyWnjebZrio+Ev9V31ickw1KI4Lkp9HRv0lghc0svp+31B6Nj8TqJ761BCT/DrQkZqlcqzQqGeNGAuomPusU3zJk15bzniI29KM7RKCFTcTdxMyNJYF9XwjwwOwmmtubobpLooi4bAMH+rVHQvAgA4=
+  sonarqube:
+    organization: "jep42-github"
+    token:
+	  secure: "3g5M4KdCXuqzb/hcPs56P+d5UOmg390SCHjO2DhIDKtmg0DZjMpHEukXqieW9GV4b32w/gSNpBw9jxqklwburpyrf5gcW6k66XdlgihvDUq74wfVMORpumNPagYHw9tbxb1WOxRrM721xFkYgujk+UDdd0F/WD94if+80dMwEiN2bJOiQWX3US7QriADsuvMze8I90bLrQ1549SLbpMFxd1iw8EyHQTKBa0oHn9NVDv7BzL6+WtloyPbs3IE1SojOPoxyQyT5AerswaKCIMoSIg9uqO5MpF+Y5QlWqx8JI3117eLesCwyq2t3wfS7x+PAw/oYE39rd3wkCET5Cpg2ZZD6kqAFE1cTtYIM13uAKZKPx7ebmBV17ZQ+cNpwNjZ9BHwSX2l4TfW8Yykp5kRn33LhNU3RmuXq2XYs2YgTgz4mRELSsFDbMQhRtwwF9Yx5gu1fds2ZJJaiFT+e+DzNPULRa0kxS33neLPPF1nkUiQ4L7DnOmFW4rFV1X8Z5KSnan4ulLRGorwu6zfIzeIfLyWnjebZrio+Ev9V31ickw1KI4Lkp9HRv0lghc0svp+31B6Nj8TqJ761BCT/DrQkZqlcqzQqGeNGAuomPusU3zJk15bzniI29KM7RKCFTcTdxMyNJYF9XwjwwOwmmtubobpLooi4bAMH+rVHQvAgA4="	 
 jdk:
 - oraclejdk8
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarQube analysis
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.login=$SONAR_TOKEN
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
 cache:
   directories:
   - "$HOME/.m2/repository"
