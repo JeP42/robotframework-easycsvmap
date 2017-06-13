@@ -2,12 +2,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.jep42</groupId>
-    <artifactId>robotframework-easycsvmap-reactor</artifactId>
+    <artifactId>easycsvmap-reactor</artifactId>
     <version>0.0.4-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
-	<name>robotframework-easycsvmap-reactor</name>
+	<name>easycsvmap-reactor</name>
 	<description>Robot framework keywords to read/write values of CSV file</description>
 	<url>https://github.com/JeP42/robotframework-easycsvmap</url>
 
@@ -26,7 +26,8 @@
 
     <modules>
             <module>easycsvmap</module>
-            <module>remoteserver</module>
+            <module>robotremoteserver</module>
+            <module>roboteasycsvmap</module>		
     </modules>
 
     <build>
