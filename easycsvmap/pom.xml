@@ -3,11 +3,11 @@
 
     <artifactId>easycsvmap</artifactId>
 
-	<parent>
-		<groupId>com.github.jep42</groupId>
-		<artifactId>robotframework-easycsvmap-reactor</artifactId>
-		<version>0.0.4-SNAPSHOT</version>
-	</parent>
+  <parent>
+    <groupId>com.github.jep42</groupId>
+    <artifactId>easycsvmap-reactor</artifactId>
+    <version>0.0.4-SNAPSHOT</version>
+  </parent>
 
     <build>
         <plugins>
@@ -17,34 +17,34 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-				</configuration>
-			</plugin>
-			<plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<additionalparam>-Xdoclint:none</additionalparam>
-				</configuration>
-		    </plugin>
+        </configuration>
+      </plugin>
+      <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <additionalparam>-Xdoclint:none</additionalparam>
+        </configuration>
+        </plugin>
 
-		    <plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>report</id>
-						<phase>test</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+        <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
         </plugins>
     </build>
 
