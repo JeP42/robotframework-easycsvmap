@@ -27,6 +27,22 @@ public class EasyCSVMapTest {
         assertEquals("datacol2-line0", csvMap.getValues("{0}.2").values().iterator().next());
     }
 
+
+    @Test
+    public void parseCsv_headerLineWithBlanks() {
+
+        EasyCSVMap csvMap = new EasyCSVMap(0);
+        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-with-blanks-five-lines.csv").getFile();
+
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        // expect a standard header with indexes to be available ==> access columns via index
+        assertEquals("datacol0-line0", csvMap.getValues("{1}.Col0 Header").values().iterator().next());
+        assertEquals("datacol1-line0", csvMap.getValues("{1}.Col1 Header").values().iterator().next());
+        assertEquals("datacol2-line0", csvMap.getValues("{1}.Col2-Header").values().iterator().next());
+    }
+
+
     @Test
     public void parseCsv_nonStandardSeparator() {
 
@@ -192,7 +208,7 @@ public class EasyCSVMapTest {
 
     @Test
     public void addRow() {
-    	EasyCSVMap csvMap = new EasyCSVMap(0);
+        EasyCSVMap csvMap = new EasyCSVMap(0);
         String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -208,7 +224,7 @@ public class EasyCSVMapTest {
 
     @Test(expected = CSVMapException.class)
     public void addRow_tooManyArgs() {
-    	EasyCSVMap csvMap = new EasyCSVMap(0);
+        EasyCSVMap csvMap = new EasyCSVMap(0);
         String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -218,7 +234,7 @@ public class EasyCSVMapTest {
 
     @Test(expected = CSVMapException.class)
     public void addRow_notEnoughArgs() {
-    	EasyCSVMap csvMap = new EasyCSVMap(0);
+        EasyCSVMap csvMap = new EasyCSVMap(0);
         String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
         csvMap.parseCsvFromFile(csvFilePath);
 
