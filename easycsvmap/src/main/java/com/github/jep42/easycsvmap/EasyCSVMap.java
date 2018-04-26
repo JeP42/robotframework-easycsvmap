@@ -283,7 +283,7 @@ public class EasyCSVMap {
 
         CSVFileWriter writer = null;
         try {
-            writer = CSVFileFactory.getWriter(pathToCsv, this.csvContext.getColumnSeparator());
+            writer = CSVFileFactory.getWriter(pathToCsv, this.csvContext.getColumnSeparator(), this.csvContext.getQuoteCharacter(), this.csvContext.getLineEnd());
 
             Iterator<Map<String, String>> it = this.csvMap.iterator();
             while (it.hasNext()) {

@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.github.jep42.easycsvmap.EasyCSVMap;
+import com.github.jep42.easycsvmap.core.CSVContext;
 
 /**
  *
@@ -34,9 +35,9 @@ import com.github.jep42.easycsvmap.EasyCSVMap;
  */
 public class RobotEasyCsv {
 
-	public static final String ROBOT_LIBRARY_VERSION = "0.2";
+    public static final String ROBOT_LIBRARY_VERSION = "0.2";
 
-	//ROBOT_LIBRARY_SCOPE is actually not supported for java remote libraries, scope is always GLOBAL in such a scenario...
+    //ROBOT_LIBRARY_SCOPE is actually not supported for java remote libraries, scope is always GLOBAL in such a scenario...
     public static final String ROBOT_LIBRARY_SCOPE = "GLOBAL";
 
     private Map<Integer, EasyCSVMap> csvMaps = new ConcurrentHashMap<Integer, EasyCSVMap>();
@@ -47,13 +48,13 @@ public class RobotEasyCsv {
      * The Session ID has to be unique and is used in subsequent calls to specify the CSV session.
      *
      * Arguments:
-	 * - _sessionId_: unique ID for new CSV session
-	 * - _pathToCsv_: path to the CSV file
+     * - _sessionId_: unique ID for new CSV session
+     * - _pathToCsv_: path to the CSV file
      * - _headerLineIndex_: the line index of the header line within CSV. Set to -1 if no header line exists.
      *
      * Example:
-	 * | Parse Csv From File | 4711 | {TEMPDIR}/download.csv | 0 |
-	 *
+     * | Parse Csv From File | 4711 | {TEMPDIR}/download.csv | 0 |
+     *
      */
     public void parseCsvFromFile(Integer sessionId, String pathToCsv, int headerLineIndex) {
         EasyCSVMap easyCSVMap = new EasyCSVMap(headerLineIndex);
@@ -62,16 +63,55 @@ public class RobotEasyCsv {
     }
 
     /**
+     * Parse a CSV file from the given path and creates a new CSV session object identified by the given Session ID.
+     * The Session ID has to be unique and is used in subsequent calls to specify the CSV session.
+     *
+     * Arguments:
+     * - _sessionId_: unique ID for new CSV session
+     * - _pathToCsv_: path to the CSV file
+     * - _headerLineIndex_: the line index of the header line within CSV. Set to -1 if no header line exists.
+     * - _columnSeparator_: the column separator character
+     * - _quoteCharacter_: the character used to quote values
+     * - _lineEnd_: Specifies the character sequence used to terminate a line, this parameter is only used for save operation. In control characters backslashes have to be escaped (e.g. for new line character use \\n )
+     *
+     * Example:
+     * | Parse Csv From File | 4711 | {TEMPDIR}/download.csv | 0 | ; | " | \\r\\n
+     *
+     */
+    public void parseCsvFromFile(Integer sessionId, String pathToCsv, int headerLineIndex, String columnSeparator, String quoteCharacter, String lineEndEscaped) {
+        EasyCSVMap easyCSVMap = new EasyCSVMap(
+                this.getCsvContext(headerLineIndex, columnSeparator.toCharArray()[0], quoteCharacter.toCharArray()[0], this.removeEscapeCharactersFrom(lineEndEscaped)));
+        easyCSVMap.parseCsvFromFile(pathToCsv);
+        this.csvMaps.put(sessionId, easyCSVMap);
+    }
+
+    private String removeEscapeCharactersFrom(String lineEndEscaped) {
+        lineEndEscaped = lineEndEscaped.replaceAll("\\\\r", "\r");
+        lineEndEscaped = lineEndEscaped.replaceAll("\\\\n", "\n");
+
+        return lineEndEscaped;
+    }
+
+    private CSVContext getCsvContext(int headerLineIndex, char columnSeparator, char quoteCharacter, String lineEnd) {
+        CSVContext csvContext = new CSVContext(headerLineIndex);
+        csvContext.setColumnSeparator(columnSeparator);
+        csvContext.setQuoteCharacter(quoteCharacter);
+        csvContext.setLineEnd(lineEnd);
+
+        return csvContext;
+    }
+
+    /**
      * Set the value of a the cell(s) matching the given selector expression.
      *
      * Arguments:
      * - _sessionId_:  ID of a previously created CSV session
-	 * - _selector_: a valid CSV selector expression
-	 * - _value_: the value to be set
-	 *
-	 * Example:
-	 * | Set Csv Values | 4711 | {1}.name | Peter Pan |
-	 *
+     * - _selector_: a valid CSV selector expression
+     * - _value_: the value to be set
+     *
+     * Example:
+     * | Set Csv Values | 4711 | {1}.name | Peter Pan |
+     *
      */
     public void setCsvValues(Integer sessionId, String selector, String value) {
         this.checkInitialized(sessionId);
@@ -79,9 +119,9 @@ public class RobotEasyCsv {
     }
 
     private void checkInitialized(Integer sessionId) {
-    	 if (this.csvMaps.get(sessionId) == null) {
-    		 throw new RobotCsvException(String.format("EasyCSV was not properly initialized for the given session ID %s", sessionId));
-    	 }
+         if (this.csvMaps.get(sessionId) == null) {
+             throw new RobotCsvException(String.format("EasyCSV was not properly initialized for the given session ID %s", sessionId));
+         }
     }
 
     /**
@@ -89,11 +129,11 @@ public class RobotEasyCsv {
      *
      * Arguments:
      * - _sessionId_:  ID of a previously created CSV session
-	 * - _selector_: a valid CSV selector expression
-	 *
-	 * Example:
-	 * | {name}= | Get First Csv Value | 4711 | {1}.name |
-	 *
+     * - _selector_: a valid CSV selector expression
+     *
+     * Example:
+     * | {name}= | Get First Csv Value | 4711 | {1}.name |
+     *
      */
     public String getFirstCsvValue(Integer sessionId, String selector) {
         this.checkInitialized(sessionId);
@@ -113,11 +153,11 @@ public class RobotEasyCsv {
      *
      * Arguments:
      * - _sessionId_:  ID of a previously created CSV session
-	 * - _selector_: a valid CSV selector expression
-	 *
-	 * Example:
-	 * | &{name}= | Get All Csv Values | 4711 | [city=^Karlsruhe*$].name |
-	 *
+     * - _selector_: a valid CSV selector expression
+     *
+     * Example:
+     * | &{name}= | Get All Csv Values | 4711 | [city=^Karlsruhe*$].name |
+     *
      */
     public List<String> getAllCsvValues(Integer sessionId, String selector) {
         this.checkInitialized(sessionId);
@@ -130,11 +170,11 @@ public class RobotEasyCsv {
      *
      * Arguments:
      * - _sessionId_:  ID of a previously created CSV session
-	 * - _filePath_: target path to the CSV file
-	 *
-	 * Example:
-	 * | Save Csv To File | 4711 | {TEMPDIR}/myFile.csv |
-	 *
+     * - _filePath_: target path to the CSV file
+     *
+     * Example:
+     * | Save Csv To File | 4711 | {TEMPDIR}/myFile.csv |
+     *
      */
     public void saveCsvToFile(Integer sessionId, String filePath) {
         this.checkInitialized(sessionId);
@@ -146,11 +186,11 @@ public class RobotEasyCsv {
      *
      * Arguments:
      * - _sessionId_:  ID of a previously created CSV session
-	 * - _values_: The values of the new row
-	 *
-	 * Example:
-	 * | Add Row | 4711 | col1value | col2value | col3value |
-	 *
+     * - _values_: The values of the new row
+     *
+     * Example:
+     * | Add Row | 4711 | col1value | col2value | col3value |
+     *
      */
     public void addRow(Integer sessionId, String... values) {
         this.checkInitialized(sessionId);
@@ -162,10 +202,10 @@ public class RobotEasyCsv {
      *
      * Arguments:
      * - _sessionId_:  ID of a previously created CSV session
-	 *
-	 * Example:
-	 * | Remove CSV Session | 4711 |
-	 *
+     *
+     * Example:
+     * | Remove CSV Session | 4711 |
+     *
      */
     public void removeCsvSession(Integer sessionId) {
         this.checkInitialized(sessionId);

@@ -11,8 +11,8 @@ public class OpenCSVWriter implements CSVFileWriter {
 
     private CSVWriter csvWriter;
 
-    public OpenCSVWriter(String targetPath, char columnSeparator) throws IOException {
-        this.csvWriter = new CSVWriter(new FileWriter(targetPath), columnSeparator);
+    public OpenCSVWriter(String targetPath, char columnSeparator, char quoteCharacter, String lineEnd) throws IOException {
+        this.csvWriter = new CSVWriter(new FileWriter(targetPath), columnSeparator, quoteCharacter, lineEnd);
     }
 
     @Override

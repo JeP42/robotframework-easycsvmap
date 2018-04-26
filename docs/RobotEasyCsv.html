@@ -5,7 +5,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="-1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta content="Robot Framework 3.0 (Jython 2.7.0 on java1.8.0_111)" name="Generator">
+<meta content="Robot Framework 3.0.2 (Jython 2.7.0 on java1.8.0_161)" name="Generator">
 <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAAAIAAAAAAAAAAAAAEAAAAAAAAAAAAAAAJEBoACtnfgA5cYYAERsiAEx2lAAbKkQAcazBACZCVwAcM1cAK0ucAAMDBQAnQncASG+FABkoVQAyWmgA6f8SgvH/Ij99+GLyIinyJfn/Yi//KSLzUy9iZogpIld3/4JVVTkid7vyUjNVNVJEAGOZ6Z7pXwAABpmZkRiLAAAGiJZpmGAAAEEt3SXdxAAATC7o/u3EAAC8MRZpjasAAAY1VVVTYAAABKqqqqpAAAAADKqq4AAAAAAAv4sAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMADAADgAwAA4AcAAOAHAADgBwAAwAcAAOAHAADgDwAA8A8AAPg/AAD+fwAA">
 <style media="all" type="text/css">
 body {
@@ -157,6 +157,76 @@ tr.no-match.hide-unmatched {
     display: none;
 }
 </style>
+<style media="all" type="text/css">
+/* Pygments 'default' style sheet. Generated with Pygments 2.1.3 using:
+     pygmentize -S default -f html -a .code > src/robot/htmldata/libdoc/pygments.css
+*/
+.code .hll { background-color: #ffffcc }
+.code  { background: #f8f8f8; }
+.code .c { color: #408080; font-style: italic } /* Comment */
+.code .err { border: 1px solid #FF0000 } /* Error */
+.code .k { color: #008000; font-weight: bold } /* Keyword */
+.code .o { color: #666666 } /* Operator */
+.code .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.code .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.code .cp { color: #BC7A00 } /* Comment.Preproc */
+.code .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.code .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.code .cs { color: #408080; font-style: italic } /* Comment.Special */
+.code .gd { color: #A00000 } /* Generic.Deleted */
+.code .ge { font-style: italic } /* Generic.Emph */
+.code .gr { color: #FF0000 } /* Generic.Error */
+.code .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.code .gi { color: #00A000 } /* Generic.Inserted */
+.code .go { color: #888888 } /* Generic.Output */
+.code .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.code .gs { font-weight: bold } /* Generic.Strong */
+.code .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.code .gt { color: #0044DD } /* Generic.Traceback */
+.code .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.code .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.code .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.code .kp { color: #008000 } /* Keyword.Pseudo */
+.code .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.code .kt { color: #B00040 } /* Keyword.Type */
+.code .m { color: #666666 } /* Literal.Number */
+.code .s { color: #BA2121 } /* Literal.String */
+.code .na { color: #7D9029 } /* Name.Attribute */
+.code .nb { color: #008000 } /* Name.Builtin */
+.code .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.code .no { color: #880000 } /* Name.Constant */
+.code .nd { color: #AA22FF } /* Name.Decorator */
+.code .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.code .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.code .nf { color: #0000FF } /* Name.Function */
+.code .nl { color: #A0A000 } /* Name.Label */
+.code .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.code .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.code .nv { color: #19177C } /* Name.Variable */
+.code .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.code .w { color: #bbbbbb } /* Text.Whitespace */
+.code .mb { color: #666666 } /* Literal.Number.Bin */
+.code .mf { color: #666666 } /* Literal.Number.Float */
+.code .mh { color: #666666 } /* Literal.Number.Hex */
+.code .mi { color: #666666 } /* Literal.Number.Integer */
+.code .mo { color: #666666 } /* Literal.Number.Oct */
+.code .sb { color: #BA2121 } /* Literal.String.Backtick */
+.code .sc { color: #BA2121 } /* Literal.String.Char */
+.code .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.code .s2 { color: #BA2121 } /* Literal.String.Double */
+.code .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.code .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.code .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.code .sx { color: #008000 } /* Literal.String.Other */
+.code .sr { color: #BB6688 } /* Literal.String.Regex */
+.code .s1 { color: #BA2121 } /* Literal.String.Single */
+.code .ss { color: #19177C } /* Literal.String.Symbol */
+.code .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.code .vc { color: #19177C } /* Name.Variable.Class */
+.code .vg { color: #19177C } /* Name.Variable.Global */
+.code .vi { color: #19177C } /* Name.Variable.Instance */
+.code .il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
 <style media="print" type="text/css">
 body {
     margin: 0;
@@ -224,7 +294,7 @@ a {
 .doc pre {
     font-size: 1.1em;
     letter-spacing: 0.05em;
-    background: #eee;
+    background: #f4f4f4;
 }
 .doc code {
     padding: 0 0.2em;
@@ -362,8 +432,16 @@ window.util = function () {
         var base = window.output ? window.output.baseMillis : 0;
         return new Date(base + millis);
     }
-    function createGeneratedAgoString(generatedMillis) {
-        generatedMillis = timestamp(generatedMillis);
+    function createGeneratedString(timestamp) {
+        var date = new Date(timestamp);
+        var dt = dateTimeFromDate(date).slice(0, 17);  // drop millis
+        var offset = date.getTimezoneOffset();
+        var sign = offset > 0 ? '-' : '+';
+        var hours = Math.floor(Math.abs(offset) / 60);
+        var mins = Math.abs(offset) % 60;
+        return dt + ' GMT' + sign + padTo(hours, 2) + ':' + padTo(mins, 2);
+    }
+    function createGeneratedAgoString(timestamp) {
         function timeString(time, shortUnit) {
             var unit = {y: 'year', d: 'day', h: 'hour', m: 'minute',
                         s: 'second'}[shortUnit];
@@ -374,7 +452,7 @@ window.util = function () {
             // Not a perfect algorithm but ought to be enough
             return days - Math.floor(years / 4);
         }
-        var generated = Math.round(generatedMillis / 1000);
+        var generated = Math.round(timestamp / 1000);
         var current = Math.round(new Date().getTime() / 1000);
         var elapsed = current - generated;
         var prefix = '';
@@ -433,6 +511,7 @@ window.util = function () {
         dateTimeFromDate: dateTimeFromDate,
         formatElapsed: formatElapsed,
         timestamp: timestamp,
+        createGeneratedString: createGeneratedString,
         createGeneratedAgoString: createGeneratedAgoString,
         parseQueryString: parseQueryString
     };
@@ -468,7 +547,7 @@ window.util = function () {
 jQuery.extend({highlight:function(e,t,n,r){if(e.nodeType===3){var i=e.data.match(t);if(i){var s=document.createElement(n||"span");s.className=r||"highlight";var o=e.splitText(i.index);o.splitText(i[0].length);var u=o.cloneNode(true);s.appendChild(u);o.parentNode.replaceChild(s,o);return 1}}else if(e.nodeType===1&&e.childNodes&&!/(script|style)/i.test(e.tagName)&&!(e.tagName===n.toUpperCase()&&e.className===r)){for(var a=0;a<e.childNodes.length;a++){a+=jQuery.highlight(e.childNodes[a],t,n,r)}}return 0}});jQuery.fn.unhighlight=function(e){var t={className:"highlight",element:"span"};jQuery.extend(t,e);return this.find(t.element+"."+t.className).each(function(){var e=this.parentNode;e.replaceChild(this.firstChild,this);e.normalize()}).end()};jQuery.fn.highlight=function(e,t){var n={className:"highlight",element:"span",caseSensitive:false,wordsOnly:false};jQuery.extend(n,t);if(e.constructor===String){e=[e]}e=jQuery.grep(e,function(e,t){return e!=""});e=jQuery.map(e,function(e,t){return e.replace(/[-[\]{}()*+?.,\\^$|#\s]/g,"\\$&")});if(e.length==0){return this}var r=n.caseSensitive?"":"i";var i="("+e.join("|")+")";if(n.wordsOnly){i="\\b"+i+"\\b"}var s=new RegExp(i,r);return this.each(function(){jQuery.highlight(this,s,n.element,n.className)})}
 </script>
 <script type="text/javascript">
-libdoc = {"all_tags":[],"contains_tags":false,"doc":"<p>This library provides keywords to read / write values from CSV files using selector expressions. Basically, the selector expression consists of two elements: a <b>row selector\x3c/b> and a <b>column selector\x3c/b> in the format &lt;rowSelector&gt;.&lt;columnSelector&gt;\x3c/p>\n<p><b>Row Selector\x3c/b>\x3c/p>\n<p>Rows can be selected directly via row index or via a regular expression. Obviously, a row index always matches exactly one row in the CSV whereas a regular expression may match several rows.\x3c/p>\n<p><b>Column Selector\x3c/b>\x3c/p>\n<p>The column can be selected via its name as long as the the CSV contains a header row and the row index of the header row was properly set when parsing the CSV file via <a href=\"#Parse%20Csv%20From%20File\" class=\"name\">Parse Csv From File\x3c/a>. If the CSV does not contain a header row the column index has to be used as selector.\x3c/p>\n<p>Example selector expressions:\x3c/p>\n<table border=\"1\">\n<tr>\n<td><b>Selector\x3c/b>\x3c/td>\n<td><b>Comment\x3c/b>\x3c/td>\n\x3c/tr>\n<tr>\n<td><code>{2}.name\x3c/code>\x3c/td>\n<td>If a header row was specified then columns can be accessed via their names. Hence, this expression would find the value of column 'name' of the third row in the CSV.\x3c/td>\n\x3c/tr>\n<tr>\n<td><code>{*}.name\x3c/code>\x3c/td>\n<td>The row selector supports wildcard, so this expression would select all rows and therefore finds all values of column 'name'\x3c/td>\n\x3c/tr>\n<tr>\n<td><code>{2,3,4}.name\x3c/code>\x3c/td>\n<td>A list of row indexes can be used to select particular rows by index. This expression would select column 'name' of rows with index 2, 3 and 4\x3c/td>\n\x3c/tr>\n<tr>\n<td><code>{2}.10\x3c/code>\x3c/td>\n<td>If no header row was specified then the column has to be selected via its index. Therefore, this expression would find the value of 11th column of the third row in the CSV.\x3c/td>\n\x3c/tr>\n<tr>\n<td><code>[city=^Ka.*$].name\x3c/code>\x3c/td>\n<td>The row selector supports regular expressions to select lines with particular values in particular columns. This expression would select all lines with a value starting with \"Ka\" in the column name'\x3c/td>\n\x3c/tr>\n\x3c/table>","generated":"2017-06-07 19:33:29","inits":[],"keywords":[{"args":["sessionId","*values"],"doc":"<p>Add a row to CSV.\x3c/p>\n<p>Arguments:\x3c/p>\n<ul>\n<li><i>sessionId\x3c/i>:  ID of a previously created CSV session\x3c/li>\n<li><i>values\x3c/i>: The values of the new row\x3c/li>\n\x3c/ul>\n<p>Example:\x3c/p>\n<table border=\"1\">\n<tr>\n<td>Add Row\x3c/td>\n<td>4711\x3c/td>\n<td>col1value\x3c/td>\n<td>col2value\x3c/td>\n<td>col3value\x3c/td>\n\x3c/tr>\n\x3c/table>","matched":true,"name":"Add Row","shortdoc":"Add a row to CSV.","tags":[]},{"args":["sessionId","selector"],"doc":"<p>Get the values of all cells matching the given selector expression.&lt;p&gt; The keyword returns list of values without further information about the corresponding source cells.\x3c/p>\n<p>Arguments:\x3c/p>\n<ul>\n<li><i>sessionId\x3c/i>:  ID of a previously created CSV session\x3c/li>\n<li><i>selector\x3c/i>: a valid CSV selector expression\x3c/li>\n\x3c/ul>\n<p>Example:\x3c/p>\n<table border=\"1\">\n<tr>\n<td>&amp;{name}=\x3c/td>\n<td>Get All Csv Values\x3c/td>\n<td>4711\x3c/td>\n<td>[city=^Karlsruhe*$].name\x3c/td>\n\x3c/tr>\n\x3c/table>","matched":true,"name":"Get All Csv Values","shortdoc":"Get the values of all cells matching the given selector expression.<p>","tags":[]},{"args":["sessionId","selector"],"doc":"<p>Get the value of the first cell matching the given selector expression.\x3c/p>\n<p>Arguments:\x3c/p>\n<ul>\n<li><i>sessionId\x3c/i>:  ID of a previously created CSV session\x3c/li>\n<li><i>selector\x3c/i>: a valid CSV selector expression\x3c/li>\n\x3c/ul>\n<p>Example:\x3c/p>\n<table border=\"1\">\n<tr>\n<td>{name}=\x3c/td>\n<td>Get First Csv Value\x3c/td>\n<td>4711\x3c/td>\n<td>{1}.name\x3c/td>\n\x3c/tr>\n\x3c/table>","matched":true,"name":"Get First Csv Value","shortdoc":"Get the value of the first cell matching the given selector expression.","tags":[]},{"args":["sessionId","pathToCsv","headerLineIndex"],"doc":"<p>Parse a CSV file from the given path and creates a new CSV session object identified by the given Session ID. The Session ID has to be unique and is used in subsequent calls to specify the CSV session.\x3c/p>\n<p>Arguments:\x3c/p>\n<ul>\n<li><i>sessionId\x3c/i>: unique ID for new CSV session\x3c/li>\n<li><i>pathToCsv\x3c/i>: path to the CSV file\x3c/li>\n<li><i>headerLineIndex\x3c/i>: the line index of the header line within CSV. Set to -1 if no header line exists.\x3c/li>\n\x3c/ul>\n<p>Example:\x3c/p>\n<table border=\"1\">\n<tr>\n<td>Parse Csv From File\x3c/td>\n<td>4711\x3c/td>\n<td>{TEMPDIR}/download.csv\x3c/td>\n<td>0\x3c/td>\n\x3c/tr>\n\x3c/table>","matched":true,"name":"Parse Csv From File","shortdoc":"Parse a CSV file from the given path and creates a new CSV session object identified by the given Session ID.","tags":[]},{"args":["sessionId"],"doc":"<p>Removes the CSV session identified by the given session ID.\x3c/p>\n<p>Arguments:\x3c/p>\n<ul>\n<li><i>sessionId\x3c/i>:  ID of a previously created CSV session\x3c/li>\n\x3c/ul>\n<p>Example:\x3c/p>\n<table border=\"1\">\n<tr>\n<td>Remove CSV Session\x3c/td>\n<td>4711\x3c/td>\n\x3c/tr>\n\x3c/table>","matched":true,"name":"Remove Csv Session","shortdoc":"Removes the CSV session identified by the given session ID.","tags":[]},{"args":["sessionId","filePath"],"doc":"<p>Save the CSV to file.\x3c/p>\n<p>Arguments:\x3c/p>\n<ul>\n<li><i>sessionId\x3c/i>:  ID of a previously created CSV session\x3c/li>\n<li><i>filePath\x3c/i>: target path to the CSV file\x3c/li>\n\x3c/ul>\n<p>Example:\x3c/p>\n<table border=\"1\">\n<tr>\n<td>Save Csv To File\x3c/td>\n<td>4711\x3c/td>\n<td>{TEMPDIR}/myFile.csv\x3c/td>\n\x3c/tr>\n\x3c/table>","matched":true,"name":"Save Csv To File","shortdoc":"Save the CSV to file.","tags":[]},{"args":["sessionId","selector","value"],"doc":"<p>Set the value of a the cell(s) matching the given selector expression.\x3c/p>\n<p>Arguments:\x3c/p>\n<ul>\n<li><i>sessionId\x3c/i>:  ID of a previously created CSV session\x3c/li>\n<li><i>selector\x3c/i>: a valid CSV selector expression\x3c/li>\n<li><i>value\x3c/i>: the value to be set\x3c/li>\n\x3c/ul>\n<p>Example:\x3c/p>\n<table border=\"1\">\n<tr>\n<td>Set Csv Values\x3c/td>\n<td>4711\x3c/td>\n<td>{1}.name\x3c/td>\n<td>Peter Pan\x3c/td>\n\x3c/tr>\n\x3c/table>","matched":true,"name":"Set Csv Values","shortdoc":"Set the value of a the cell(s) matching the given selector expression.","tags":[]}],"name":"RobotEasyCsv","named_args":false,"scope":"global","version":"0.2"};
+libdoc = {"all_tags":[],"contains_tags":false,"doc":"<p>This library provides keywords to read / write values from CSV files using selector expressions. Basically, the selector expression consists of two elements: a <b>row selector\x3c/b> and a <b>column selector\x3c/b> in the format &lt;rowSelector&gt;.&lt;columnSelector&gt;\x3c/p>\n<p><b>Row Selector\x3c/b>\x3c/p>\n<p>Rows can be selected directly via row index or via a regular expression. Obviously, a row index always matches exactly one row in the CSV whereas a regular expression may match several rows.\x3c/p>\n<p><b>Column Selector\x3c/b>\x3c/p>\n<p>The column can be selected via its name as long as the the CSV contains a header row and the row index of the header row was properly set when parsing the CSV file via <a href=\"#Parse%20Csv%20From%20File\" class=\"name\">Parse Csv From File\x3c/a>. If the CSV does not contain a header row the column index has to be used as selector.\x3c/p>\n<p>Example selector expressions:\x3c/p>\n<table border=\"1\">\n<tr>\n<td><b>Selector\x3c/b>\x3c/td>\n<td><b>Comment\x3c/b>\x3c/td>\n\x3c/tr>\n<tr>\n<td><code>{2}.name\x3c/code>\x3c/td>\n<td>If a header row was specified then columns can be accessed via their names. Hence, this expression would find the value of column 'name' of the third row in the CSV.\x3c/td>\n\x3c/tr>\n<tr>\n<td><code>{*}.name\x3c/code>\x3c/td>\n<td>The row selector supports wildcard, so this expression would select all rows and therefore finds all values of column 'name'\x3c/td>\n\x3c/tr>\n<tr>\n<td><code>{2,3,4}.name\x3c/code>\x3c/td>\n<td>A list of row indexes can be used to select particular rows by index. This expression would select column 'name' of rows with index 2, 3 and 4\x3c/td>\n\x3c/tr>\n<tr>\n<td><code>{2}.10\x3c/code>\x3c/td>\n<td>If no header row was specified then the column has to be selected via its index. Therefore, this expression would find the value of 11th column of the third row in the CSV.\x3c/td>\n\x3c/tr>\n<tr>\n<td><code>[city=^Ka.*$].name\x3c/code>\x3c/td>\n<td>The row selector supports regular expressions to select lines with particular values in particular columns. This expression would select all lines with a value starting with \"Ka\" in the column name'\x3c/td>\n\x3c/tr>\n\x3c/table>","generated":"2018-04-26 21:15:04","inits":[],"keywords":[{"args":["sessionId","*values"],"doc":"<p>Add a row to CSV.\x3c/p>\n<p>Arguments:\x3c/p>\n<ul>\n<li><i>sessionId\x3c/i>:  ID of a previously created CSV session\x3c/li>\n<li><i>values\x3c/i>: The values of the new row\x3c/li>\n\x3c/ul>\n<p>Example:\x3c/p>\n<table border=\"1\">\n<tr>\n<td>Add Row\x3c/td>\n<td>4711\x3c/td>\n<td>col1value\x3c/td>\n<td>col2value\x3c/td>\n<td>col3value\x3c/td>\n\x3c/tr>\n\x3c/table>","matched":true,"name":"Add Row","shortdoc":"Add a row to CSV.","tags":[]},{"args":["sessionId","selector"],"doc":"<p>Get the values of all cells matching the given selector expression.&lt;p&gt; The keyword returns list of values without further information about the corresponding source cells.\x3c/p>\n<p>Arguments:\x3c/p>\n<ul>\n<li><i>sessionId\x3c/i>:  ID of a previously created CSV session\x3c/li>\n<li><i>selector\x3c/i>: a valid CSV selector expression\x3c/li>\n\x3c/ul>\n<p>Example:\x3c/p>\n<table border=\"1\">\n<tr>\n<td>&amp;{name}=\x3c/td>\n<td>Get All Csv Values\x3c/td>\n<td>4711\x3c/td>\n<td>[city=^Karlsruhe*$].name\x3c/td>\n\x3c/tr>\n\x3c/table>","matched":true,"name":"Get All Csv Values","shortdoc":"Get the values of all cells matching the given selector expression.<p>","tags":[]},{"args":["sessionId","selector"],"doc":"<p>Get the value of the first cell matching the given selector expression.\x3c/p>\n<p>Arguments:\x3c/p>\n<ul>\n<li><i>sessionId\x3c/i>:  ID of a previously created CSV session\x3c/li>\n<li><i>selector\x3c/i>: a valid CSV selector expression\x3c/li>\n\x3c/ul>\n<p>Example:\x3c/p>\n<table border=\"1\">\n<tr>\n<td>{name}=\x3c/td>\n<td>Get First Csv Value\x3c/td>\n<td>4711\x3c/td>\n<td>{1}.name\x3c/td>\n\x3c/tr>\n\x3c/table>","matched":true,"name":"Get First Csv Value","shortdoc":"Get the value of the first cell matching the given selector expression.","tags":[]},{"args":["sessionId","pathToCsv","headerLineIndex"],"doc":"<p>Parse a CSV file from the given path and creates a new CSV session object identified by the given Session ID. The Session ID has to be unique and is used in subsequent calls to specify the CSV session.\x3c/p>\n<p>Arguments:\x3c/p>\n<ul>\n<li><i>sessionId\x3c/i>: unique ID for new CSV session\x3c/li>\n<li><i>pathToCsv\x3c/i>: path to the CSV file\x3c/li>\n<li><i>headerLineIndex\x3c/i>: the line index of the header line within CSV. Set to -1 if no header line exists.\x3c/li>\n\x3c/ul>\n<p>Example:\x3c/p>\n<table border=\"1\">\n<tr>\n<td>Parse Csv From File\x3c/td>\n<td>4711\x3c/td>\n<td>{TEMPDIR}/download.csv\x3c/td>\n<td>0\x3c/td>\n\x3c/tr>\n\x3c/table>","matched":true,"name":"Parse Csv From File","shortdoc":"Parse a CSV file from the given path and creates a new CSV session object identified by the given Session ID.","tags":[]},{"args":["sessionId","pathToCsv","headerLineIndex","columnSeparator","quoteCharacter","lineEndEscaped"],"doc":"<p>Parse a CSV file from the given path and creates a new CSV session object identified by the given Session ID. The Session ID has to be unique and is used in subsequent calls to specify the CSV session.\x3c/p>\n<p>Arguments:\x3c/p>\n<ul>\n<li><i>sessionId\x3c/i>: unique ID for new CSV session\x3c/li>\n<li><i>pathToCsv\x3c/i>: path to the CSV file\x3c/li>\n<li><i>headerLineIndex\x3c/i>: the line index of the header line within CSV. Set to -1 if no header line exists.\x3c/li>\n<li><i>columnSeparator\x3c/i>: the column separator character\x3c/li>\n<li><i>quoteCharacter\x3c/i>: the character used to quote values\x3c/li>\n<li><i>lineEnd\x3c/i>: Specifies the character sequence used to terminate a line, this parameter is only used for save operation. In control characters backslashes have to be escaped (e.g. for new line character use \\\\n )\x3c/li>\n\x3c/ul>\n<p>Example:\x3c/p>\n<pre>\nParse Csv From File | 4711 | {TEMPDIR}/download.csv | 0 | ; | \" | \\\\r\\\\n\n\x3c/pre>","matched":true,"name":"Parse Csv From File","shortdoc":"Parse a CSV file from the given path and creates a new CSV session object identified by the given Session ID.","tags":[]},{"args":["sessionId"],"doc":"<p>Removes the CSV session identified by the given session ID.\x3c/p>\n<p>Arguments:\x3c/p>\n<ul>\n<li><i>sessionId\x3c/i>:  ID of a previously created CSV session\x3c/li>\n\x3c/ul>\n<p>Example:\x3c/p>\n<table border=\"1\">\n<tr>\n<td>Remove CSV Session\x3c/td>\n<td>4711\x3c/td>\n\x3c/tr>\n\x3c/table>","matched":true,"name":"Remove Csv Session","shortdoc":"Removes the CSV session identified by the given session ID.","tags":[]},{"args":["sessionId","filePath"],"doc":"<p>Save the CSV to file.\x3c/p>\n<p>Arguments:\x3c/p>\n<ul>\n<li><i>sessionId\x3c/i>:  ID of a previously created CSV session\x3c/li>\n<li><i>filePath\x3c/i>: target path to the CSV file\x3c/li>\n\x3c/ul>\n<p>Example:\x3c/p>\n<table border=\"1\">\n<tr>\n<td>Save Csv To File\x3c/td>\n<td>4711\x3c/td>\n<td>{TEMPDIR}/myFile.csv\x3c/td>\n\x3c/tr>\n\x3c/table>","matched":true,"name":"Save Csv To File","shortdoc":"Save the CSV to file.","tags":[]},{"args":["sessionId","selector","value"],"doc":"<p>Set the value of a the cell(s) matching the given selector expression.\x3c/p>\n<p>Arguments:\x3c/p>\n<ul>\n<li><i>sessionId\x3c/i>:  ID of a previously created CSV session\x3c/li>\n<li><i>selector\x3c/i>: a valid CSV selector expression\x3c/li>\n<li><i>value\x3c/i>: the value to be set\x3c/li>\n\x3c/ul>\n<p>Example:\x3c/p>\n<table border=\"1\">\n<tr>\n<td>Set Csv Values\x3c/td>\n<td>4711\x3c/td>\n<td>{1}.name\x3c/td>\n<td>Peter Pan\x3c/td>\n\x3c/tr>\n\x3c/table>","matched":true,"name":"Set Csv Values","shortdoc":"Set the value of a the cell(s) matching the given selector expression.","tags":[]}],"name":"RobotEasyCsv","named_args":false,"scope":"global","version":"0.2"};
 </script>
 <title></title>
 </head>

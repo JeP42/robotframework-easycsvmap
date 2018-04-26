@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import com.github.jep42.easycsvmap.core.CSVContext;
 import com.github.jep42.easycsvmap.core.CSVMapException;
+import com.github.jep42.easycsvmap.util.FileUtil;
 
 public class EasyCSVMapTest {
 
@@ -78,7 +79,7 @@ public class EasyCSVMapTest {
     public void parseCsv_nonStandardQuoteChar() {
         CSVContext csvContext = new CSVContext(42);
         csvContext.setHeaderRow(0);
-        csvContext.setQuoteCharacter('$');
+        csvContext.setQuoteCharacter('#');
 
         EasyCSVMap csvMap = new EasyCSVMap(csvContext);
 
@@ -188,8 +189,63 @@ public class EasyCSVMapTest {
         } finally {
             this.deleteTempFile(tempFilePath);
         }
-
     }
+
+    @Test
+    public void saveToFile_nonStandardEndLine() throws Exception {
+        String specialLineEnd = "§§";
+
+        CSVContext csvContext = new CSVContext(0);
+        csvContext.setLineEnd(specialLineEnd);
+
+        EasyCSVMap csvMap = new EasyCSVMap(csvContext);
+        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        String tempFilePath = this.createTempFile();
+        try {
+            csvMap.saveToFile(tempFilePath);
+
+            //read file and test on the special string
+            String csvFile = FileUtil.loadFile(tempFilePath);
+            String[] lines = csvFile.split(specialLineEnd);
+            assertEquals(6, lines.length);
+
+
+        } finally {
+            this.deleteTempFile(tempFilePath);
+        }
+    }
+
+    @Test
+    public void saveToFile_nonStandardQuoteCharacter() throws Exception {
+        char specialQuoteChar = '#';
+
+        CSVContext csvContext = new CSVContext(42);
+        csvContext.setHeaderRow(0);
+        csvContext.setQuoteCharacter(specialQuoteChar);
+
+        EasyCSVMap csvMap = new EasyCSVMap(csvContext);
+
+        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines_nonStdQuoteChar.csv").getFile();
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        String tempFilePath = this.createTempFile();
+        try {
+            csvMap.saveToFile(tempFilePath);
+
+            //read file and test on the special string
+            String csvFile = FileUtil.loadFile(tempFilePath);
+            String[] lines = csvFile.split(""+specialQuoteChar);
+            assertEquals(37, lines.length);
+
+
+        } finally {
+            this.deleteTempFile(tempFilePath);
+        }
+    }
+
+
 
     private void deleteTempFile(String tempFilePath) {
         File file = new File(tempFilePath);

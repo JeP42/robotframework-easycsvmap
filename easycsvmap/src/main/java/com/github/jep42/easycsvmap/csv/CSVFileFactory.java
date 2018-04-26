@@ -17,8 +17,8 @@ public final class CSVFileFactory {
         return new OpenCSVReader(csvString, columnSeparator, quoteCharacter);
     }
 
-    public static CSVFileWriter getWriter(String targetPath, char columnSeparator) throws IOException {
-        return new OpenCSVWriter(targetPath, columnSeparator);
+    public static CSVFileWriter getWriter(String targetPath, char columnSeparator, char quoteCharacter, String lineEnd) throws IOException {
+        return new OpenCSVWriter(targetPath, columnSeparator, quoteCharacter, lineEnd);
     }
 
 }

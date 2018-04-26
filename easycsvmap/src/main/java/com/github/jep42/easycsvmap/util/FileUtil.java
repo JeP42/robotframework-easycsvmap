@@ -1,8 +1,8 @@
 package com.github.jep42.easycsvmap.util;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public final class FileUtil {
 
@@ -10,18 +10,10 @@ public final class FileUtil {
 
     public static String loadFile(String filePath) throws IOException {
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            StringBuilder sb = new StringBuilder();
-            String line = br.readLine();
-
-            while (line != null) {
-                sb.append(line);
-                sb.append(System.lineSeparator());
-                line = br.readLine();
-            }
-            return sb.toString();
-        }
+    	byte[] encoded = Files.readAllBytes(Paths.get(filePath));
+    	return new String(encoded);
     }
 
+    
 
 }

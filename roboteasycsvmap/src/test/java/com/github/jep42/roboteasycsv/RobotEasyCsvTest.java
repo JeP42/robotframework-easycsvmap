@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.github.jep42.easycsvmap.util.FileUtil;
+
 public class RobotEasyCsvTest {
 
     @Test
@@ -22,18 +24,18 @@ public class RobotEasyCsvTest {
         easyCsv.parseCsvFromFile(2, csvFilePath2, 0);
 
         for (int i=1; i<=2; i++) {
-	        List<String> allCsvValues = easyCsv.getAllCsvValues(i, "{*}.Col0-Header");
+            List<String> allCsvValues = easyCsv.getAllCsvValues(i, "{*}.Col0-Header");
 
-	    	assertEquals("Col0-Header", allCsvValues.get(0).toString());
-	        assertEquals("datacol0-line0", allCsvValues.get(1).toString());
-	        assertEquals("datacol0-line1", allCsvValues.get(2).toString());
-	        assertEquals("datacol0-line2", allCsvValues.get(3).toString());
-	        assertEquals("datacol0-line3", allCsvValues.get(4).toString());
-	        assertEquals("datacol0-line4", allCsvValues.get(5).toString());
+            assertEquals("Col0-Header", allCsvValues.get(0).toString());
+            assertEquals("datacol0-line0", allCsvValues.get(1).toString());
+            assertEquals("datacol0-line1", allCsvValues.get(2).toString());
+            assertEquals("datacol0-line2", allCsvValues.get(3).toString());
+            assertEquals("datacol0-line3", allCsvValues.get(4).toString());
+            assertEquals("datacol0-line4", allCsvValues.get(5).toString());
         }
     }
 
-	@Test
+    @Test
     public void setCsvValues() {
 
         String csvFilePath1 = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
@@ -50,16 +52,16 @@ public class RobotEasyCsvTest {
         this.assertValues(easyCsv, 2, "43");
     }
 
-	 private void assertValues(RobotEasyCsv easyCsv, Integer sessionId, String value) {
-    	List<String> allCsvValues = easyCsv.getAllCsvValues(sessionId, "{*}.Col0-Header");
+     private void assertValues(RobotEasyCsv easyCsv, Integer sessionId, String value) {
+        List<String> allCsvValues = easyCsv.getAllCsvValues(sessionId, "{*}.Col0-Header");
 
-    	assertEquals("Col0-Header", allCsvValues.get(0).toString());
+        assertEquals("Col0-Header", allCsvValues.get(0).toString());
         assertEquals(value, allCsvValues.get(1).toString());
         assertEquals(value, allCsvValues.get(2).toString());
         assertEquals(value, allCsvValues.get(3).toString());
         assertEquals(value, allCsvValues.get(4).toString());
         assertEquals(value, allCsvValues.get(5).toString());
-	}
+    }
 
     @Test
     public void saveCsvToFile() {
@@ -88,7 +90,30 @@ public class RobotEasyCsvTest {
     }
 
 
-	@Test
+    @Test
+    public void specialLineEndSequenceProperlyConsidered() throws Exception {
+        String csvFilePath1 = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+
+        String specialLineEndSequence = "\\r\\n";
+
+        RobotEasyCsv easyCsv = new RobotEasyCsv();
+        easyCsv.parseCsvFromFile(1, csvFilePath1, 0, ";", "\"", specialLineEndSequence);
+
+        String tempFilePath = this.createTempFile();
+        try {
+            easyCsv.saveCsvToFile(1, tempFilePath);
+
+            //read file and test on the special string
+            String csvFile = FileUtil.loadFile(tempFilePath);
+            String[] lines = csvFile.split(specialLineEndSequence);
+            assertEquals(6, lines.length);
+        } finally {
+            this.deleteTempFile(tempFilePath);
+        }
+    }
+
+
+    @Test
     public void getFirstCsvValue() {
         String csvFilePath1 = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
         String csvFilePath2 = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
@@ -137,10 +162,10 @@ public class RobotEasyCsvTest {
         easyCsv.removeCsvSession(2);
 
         try {
-        	easyCsv.addRow(2, "Peter", "Pan", "pp@home.com");
-        	fail("Seems the CSV session with ID 2 was not properly removed");
+            easyCsv.addRow(2, "Peter", "Pan", "pp@home.com");
+            fail("Seems the CSV session with ID 2 was not properly removed");
         } catch (RobotCsvException e) {
-        	//nothing to do....this is expected
+            //nothing to do....this is expected
         }
     }
 
