@@ -7,6 +7,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.github.jep42.easycsvmap.core.InvalidSelectorValueException;
+import com.github.jep42.easycsvmap.util.FileUtil;
 
 public class EasyCSVMapwithRegExpLineSelectorTest {
 
@@ -14,7 +15,7 @@ public class EasyCSVMapwithRegExpLineSelectorTest {
     public void validation_invalidFormat() {
         // line with index=0 is the header line
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -25,18 +26,20 @@ public class EasyCSVMapwithRegExpLineSelectorTest {
     public void validation_invalidFormat1() {
         // line with index=0 is the header line
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
         csvMap.getValues("Col0-Header=^datacol0-line.*$].Col1-Header");
     }
 
+
+
     @Test(expected = RuntimeException.class)
     public void validation_invalidFormat2() {
         // line with index=0 is the header line
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -47,7 +50,7 @@ public class EasyCSVMapwithRegExpLineSelectorTest {
     public void validation_invalidLineSpecMissingEqual() {
         // line with index=0 is the header line
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -58,7 +61,7 @@ public class EasyCSVMapwithRegExpLineSelectorTest {
     public void validation_invalidLineSpecMissingCol() {
         // line with index=0 is the header line
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -69,7 +72,7 @@ public class EasyCSVMapwithRegExpLineSelectorTest {
     public void validation_invalidLineSpecMissingRegExp() {
         // line with index=0 is the header line
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -80,7 +83,7 @@ public class EasyCSVMapwithRegExpLineSelectorTest {
     public void validation_invalidColSpec() {
         // line with index=0 is the header line
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -90,7 +93,7 @@ public class EasyCSVMapwithRegExpLineSelectorTest {
     @Test(expected = InvalidSelectorValueException.class)
     public void getValues_invalidColumnSpec() {
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -101,7 +104,7 @@ public class EasyCSVMapwithRegExpLineSelectorTest {
     public void getValue_viaColName() {
         // line with index=0 is the header line
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -120,7 +123,7 @@ public class EasyCSVMapwithRegExpLineSelectorTest {
     public void getValue_viaColIndex() {
         // line with index=0 is the header line
         EasyCSVMap csvMap = new EasyCSVMap();
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/no-header-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/no-header-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -138,7 +141,7 @@ public class EasyCSVMapwithRegExpLineSelectorTest {
     @Test
     public void setValue_viaColName() {
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -157,7 +160,7 @@ public class EasyCSVMapwithRegExpLineSelectorTest {
     @Test
     public void setValue_viaColIndex() {
         EasyCSVMap csvMap = new EasyCSVMap();
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/no-header-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/no-header-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -176,11 +179,12 @@ public class EasyCSVMapwithRegExpLineSelectorTest {
     @Test(expected = RuntimeException.class)
     public void setValue_forHeaderLine() {
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
         csvMap.setValues("[Col0-Header=^Col0.*$].Col1-Header", "never-change-header-cells");
     }
+
 
 }

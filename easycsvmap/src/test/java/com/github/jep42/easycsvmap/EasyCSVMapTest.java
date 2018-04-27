@@ -18,7 +18,7 @@ public class EasyCSVMapTest {
     public void parseCsv_noHeaderLine() {
 
         EasyCSVMap csvMap = new EasyCSVMap();
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/no-header-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/no-header-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -33,7 +33,7 @@ public class EasyCSVMapTest {
     public void parseCsv_headerLineWithBlanks() {
 
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-with-blanks-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-with-blanks-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -51,7 +51,7 @@ public class EasyCSVMapTest {
         csvContext.setColumnSeparator(',');
 
         EasyCSVMap csvMap = new EasyCSVMap(csvContext);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/no-header-five-lines_sep1.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/no-header-five-lines_sep1.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -65,7 +65,7 @@ public class EasyCSVMapTest {
     public void parseCsv_quotedValues() {
 
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines_quotedValues.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines_quotedValues.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -83,7 +83,7 @@ public class EasyCSVMapTest {
 
         EasyCSVMap csvMap = new EasyCSVMap(csvContext);
 
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines_nonStdQuoteChar.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines_nonStdQuoteChar.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -98,7 +98,7 @@ public class EasyCSVMapTest {
 
         // line with index=0 is the header line
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -115,7 +115,7 @@ public class EasyCSVMapTest {
     public void parseCsv_invalidHeaderLineIndex() throws Exception {
 
         EasyCSVMap csvMap = new EasyCSVMap(42);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
     }
@@ -124,7 +124,7 @@ public class EasyCSVMapTest {
     public void parseCsv_headerLineContainsDuplicates() throws Exception {
 
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-with-duplicates.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-with-duplicates.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
     }
@@ -133,7 +133,7 @@ public class EasyCSVMapTest {
     public void parseCsv_invalidDataLine() throws Exception {
 
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines-one-invalid.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines-one-invalid.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
     }
@@ -142,7 +142,7 @@ public class EasyCSVMapTest {
     @Test
     public void getNumberOfCSVLines() {
         EasyCSVMap csvMap = new EasyCSVMap();
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/no-header-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/no-header-five-lines.csv");
 
         csvMap.parseCsvFromFile(csvFilePath);
 
@@ -153,7 +153,7 @@ public class EasyCSVMapTest {
     @Test
     public void getNumberOfCSVColumns() {
         EasyCSVMap csvMap = new EasyCSVMap();
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/no-header-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/no-header-five-lines.csv");
         csvMap.parseCsvFromFile(csvFilePath);
         assertEquals(3, csvMap.getNumberOfCSVColumns());
     }
@@ -161,7 +161,7 @@ public class EasyCSVMapTest {
     @Test
     public void parseCsv_emptyLines() {
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines_emptyRows.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines_emptyRows.csv");
         csvMap.parseCsvFromFile(csvFilePath);
         assertEquals(6, csvMap.getNumberOfCSVRows());
     }
@@ -169,7 +169,7 @@ public class EasyCSVMapTest {
     @Test
     public void saveToFile() {
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
         csvMap.parseCsvFromFile(csvFilePath);
         for (int i = 0; i < 3; i++) {
             csvMap.setValues("{1}.Col" + i + "-Header", "4711-" + i);
@@ -199,7 +199,7 @@ public class EasyCSVMapTest {
         csvContext.setLineEnd(specialLineEnd);
 
         EasyCSVMap csvMap = new EasyCSVMap(csvContext);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
         csvMap.parseCsvFromFile(csvFilePath);
 
         String tempFilePath = this.createTempFile();
@@ -227,7 +227,7 @@ public class EasyCSVMapTest {
 
         EasyCSVMap csvMap = new EasyCSVMap(csvContext);
 
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines_nonStdQuoteChar.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines_nonStdQuoteChar.csv");
         csvMap.parseCsvFromFile(csvFilePath);
 
         String tempFilePath = this.createTempFile();
@@ -265,7 +265,7 @@ public class EasyCSVMapTest {
     @Test
     public void addRow() {
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
         csvMap.parseCsvFromFile(csvFilePath);
 
         String[] values= new String[]{"datacol0-line5", "datacol1-line5", "datacol2-line5"};
@@ -281,7 +281,7 @@ public class EasyCSVMapTest {
     @Test(expected = CSVMapException.class)
     public void addRow_tooManyArgs() {
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
         csvMap.parseCsvFromFile(csvFilePath);
 
         String[] values= new String[]{"datacol0-line5", "datacol1-line5", "datacol2-line5", "datacol3-line5"};
@@ -291,7 +291,7 @@ public class EasyCSVMapTest {
     @Test(expected = CSVMapException.class)
     public void addRow_notEnoughArgs() {
         EasyCSVMap csvMap = new EasyCSVMap(0);
-        String csvFilePath = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
         csvMap.parseCsvFromFile(csvFilePath);
 
         String[] values= new String[]{"datacol0-line5", "datacol1-line5"};

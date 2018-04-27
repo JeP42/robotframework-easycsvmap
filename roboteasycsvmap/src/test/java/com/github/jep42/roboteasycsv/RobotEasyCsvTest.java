@@ -16,8 +16,8 @@ public class RobotEasyCsvTest {
     @Test
     public void parseCsvFromFileAndGetAllValues() {
 
-        String csvFilePath1 = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
-        String csvFilePath2 = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath1 = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
+        String csvFilePath2 = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         RobotEasyCsv easyCsv = new RobotEasyCsv();
         easyCsv.parseCsvFromFile(1, csvFilePath1, 0);
@@ -38,8 +38,8 @@ public class RobotEasyCsvTest {
     @Test
     public void setCsvValues() {
 
-        String csvFilePath1 = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
-        String csvFilePath2 = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath1 = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
+        String csvFilePath2 = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         RobotEasyCsv easyCsv = new RobotEasyCsv();
         easyCsv.parseCsvFromFile(1, csvFilePath1, 0);
@@ -65,8 +65,8 @@ public class RobotEasyCsvTest {
 
     @Test
     public void saveCsvToFile() {
-        String csvFilePath1 = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
-        String csvFilePath2 = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath1 = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
+        String csvFilePath2 = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         RobotEasyCsv easyCsv = new RobotEasyCsv();
         easyCsv.parseCsvFromFile(1, csvFilePath1, 0);
@@ -92,7 +92,7 @@ public class RobotEasyCsvTest {
 
     @Test
     public void specialLineEndSequenceProperlyConsidered() throws Exception {
-        String csvFilePath1 = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath1 = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         String specialLineEndSequence = "\\r\\n";
 
@@ -115,8 +115,8 @@ public class RobotEasyCsvTest {
 
     @Test
     public void getFirstCsvValue() {
-        String csvFilePath1 = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
-        String csvFilePath2 = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath1 = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
+        String csvFilePath2 = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         RobotEasyCsv easyCsv = new RobotEasyCsv();
         easyCsv.parseCsvFromFile(1, csvFilePath1, 0);
@@ -132,8 +132,8 @@ public class RobotEasyCsvTest {
 
     @Test
     public void addRow() {
-        String csvFilePath1 = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
-        String csvFilePath2 = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath1 = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
+        String csvFilePath2 = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         RobotEasyCsv easyCsv = new RobotEasyCsv();
         easyCsv.parseCsvFromFile(1, csvFilePath1, 0);
@@ -152,8 +152,8 @@ public class RobotEasyCsvTest {
 
     @Test
     public void removeSession() {
-        String csvFilePath1 = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
-        String csvFilePath2 = ClassLoader.getSystemResource("com/github/jep42/easycsvmap/header-0-five-lines.csv").getFile();
+        String csvFilePath1 = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
+        String csvFilePath2 = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
 
         RobotEasyCsv easyCsv = new RobotEasyCsv();
         easyCsv.parseCsvFromFile(1, csvFilePath1, 0);
