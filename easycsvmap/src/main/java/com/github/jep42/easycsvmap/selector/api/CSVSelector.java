@@ -16,14 +16,11 @@ public interface CSVSelector {
 
     void setCSVMap(List<Map<String, String>> csvMap);
 
-
     /**
-     * Checks whether the CSVSelector is valid
+     * Parse the selector so it can be used to get/set values.
      *
-     * @return
+     * @throws InvalidSelectorFormatException if the CSV selector is invalid
      */
-    boolean isValid();
-
     public void parse() throws InvalidSelectorFormatException;
 
     /**
