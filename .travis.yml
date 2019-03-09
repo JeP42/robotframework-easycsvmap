@@ -20,6 +20,6 @@ cache:
   - "$HOME/.sonar/cache"
 notifications:
   email:
-    - jep0042@gmail.com
+    - jep0042@posteo.de
 after_success:
   - bash <(curl -s https://codecov.io/bash)
