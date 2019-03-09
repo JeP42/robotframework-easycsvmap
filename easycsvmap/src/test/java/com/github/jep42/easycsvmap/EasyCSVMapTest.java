@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.github.jep42.easycsvmap.core.CSVContext;
@@ -298,5 +299,29 @@ public class EasyCSVMapTest {
         csvMap.addRow(values);
     }
 
+    @Test
+    @Ignore
+    public void parseCsv_utf8WithBom() {
+        EasyCSVMap csvMap = new EasyCSVMap(0);
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/csv-in-utf8-with-bom.csv");
+
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        // expect a header with column names to be available ==> access columns via name
+        assertEquals("ピーターパン", csvMap.getValues("{1}.name").values().iterator().next());
+        assertEquals("peter@pan.com", csvMap.getValues("{1}.email").values().iterator().next());
+    }
+
+    @Test
+    public void parseCsv_utf8WithoutBom() {
+        EasyCSVMap csvMap = new EasyCSVMap(0);
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/csv-in-utf8-without-bom.csv");
+
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        // expect a header with column names to be available ==> access columns via name
+        assertEquals("ピーターパン", csvMap.getValues("{1}.name").values().iterator().next());
+        assertEquals("peter@pan.com", csvMap.getValues("{1}.email").values().iterator().next());
+    }
 
 }
