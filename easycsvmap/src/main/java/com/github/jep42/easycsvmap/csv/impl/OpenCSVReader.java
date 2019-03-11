@@ -1,20 +1,41 @@
 package com.github.jep42.easycsvmap.csv.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 
+import org.apache.commons.io.ByteOrderMark;
+
 import com.github.jep42.easycsvmap.csv.api.CSVFileReader;
+import com.github.jep42.easycsvmap.util.FileUtil;
 
 import au.com.bytecode.opencsv.CSVReader;
 
 public class OpenCSVReader implements CSVFileReader {
 
+    private CSVReader csvReader;
 
-    CSVReader csvReader;
+    private FileUtil fileUtil;
 
-    public OpenCSVReader(String csvString, char columnSeparator, char quoteCharacter) {
+    private char columnSeparator;
+
+    private char quoteCharacter;
+
+    public OpenCSVReader(File csvFile, char columnSeparator, char quoteCharacter) throws IOException {
         super();
-        this.csvReader = new CSVReader(new StringReader(csvString), columnSeparator, quoteCharacter);
+
+        this.columnSeparator = columnSeparator;
+
+        this.quoteCharacter = quoteCharacter;
+
+        this.fileUtil = FileUtil.getFileUtilFor(csvFile.getAbsolutePath());
+
+        this.initializeReader();
+
+    }
+
+    private void initializeReader() {
+        this.csvReader = new CSVReader(new StringReader(fileUtil.getContent()), columnSeparator, quoteCharacter);
     }
 
     @Override
@@ -25,6 +46,16 @@ public class OpenCSVReader implements CSVFileReader {
     @Override
     public void close() throws IOException {
         this.csvReader.close();
+    }
+
+    @Override
+    public ByteOrderMark getBom() {
+        return this.fileUtil.getBom();
+    }
+
+    @Override
+    public void resetReader() {
+        this.initializeReader();
     }
 
 }

@@ -11,29 +11,42 @@ import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BOMInputStream;
 
-import com.github.jep42.easycsvmap.csv.io.CSVFile;
-
 public final class FileUtil {
 
-    private FileUtil() {}
+    private String filePath;
 
-    /**
-     * Reads data from the given path and creates a new {@link CSVFile} out of it.
-     *
-     * @param filePath Path to the file that should be read
-     * @return New CSVFile containing the data from the target file
-     * @throws IOException if an I/O error occurs
-     */
-    public static CSVFile loadFile(String filePath) throws IOException {
-        BOMInputStream input = new BOMInputStream(Files.newInputStream(Paths.get(filePath)));
+    private ByteOrderMark bom;
 
-        // Fetch BOM (optional) and actual data from the InputStream
-        ByteOrderMark bom = input.getBOM();
-        String content = IOUtils.toString(input, getCharSet(bom));
+    private String content;
 
-        return new CSVFile(content, bom);
+    private FileUtil(String filePath) {
+        this.filePath = filePath;
+
     }
 
+    public static FileUtil getFileUtilFor(String filePath) throws IOException {
+        FileUtil fileUtilInstance = new FileUtil(filePath);
+
+        fileUtilInstance.initialize();
+
+        return fileUtilInstance;
+    }
+
+    private void initialize() throws IOException {
+        BOMInputStream input = new BOMInputStream(Files.newInputStream(Paths.get(this.filePath)));
+
+        // Fetch BOM (optional) and actual data from the InputStream
+        this.bom = input.getBOM();
+        this.content = IOUtils.toString(input, getCharSet(bom));
+    }
+
+    public String getContent() {
+        return this.content;
+    }
+
+    public ByteOrderMark getBom() {
+        return this.bom;
+    }
 
     public static String getSystemResourcePath(String resourcePath) {
         try {

@@ -1,7 +1,6 @@
 package com.github.jep42.easycsvmap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +10,6 @@ import org.junit.Test;
 
 import com.github.jep42.easycsvmap.core.CSVContext;
 import com.github.jep42.easycsvmap.core.CSVMapException;
-import com.github.jep42.easycsvmap.csv.io.CSVFile;
 import com.github.jep42.easycsvmap.util.FileUtil;
 
 public class EasyCSVMapTest {
@@ -209,8 +207,8 @@ public class EasyCSVMapTest {
         try {
             csvMap.saveToFile(tempFilePath);
 
-            //read file and test on the special string
-            String csvFile = FileUtil.loadFile(tempFilePath).getContent();
+            // read file and test on the special string
+            String csvFile = FileUtil.getFileUtilFor(tempFilePath).getContent();
             String[] lines = csvFile.split(specialLineEnd);
             assertEquals(6, lines.length);
 
@@ -234,9 +232,9 @@ public class EasyCSVMapTest {
         try {
             csvMap.saveToFile(tempFilePath);
 
-            //read file and check for BOM at the very beginning
-            CSVFile csvFile = FileUtil.loadFile(tempFilePath);
-            assertNull(csvFile.getBom());
+            // read file and check for BOM at the very beginning
+            ByteOrderMark bom = FileUtil.getFileUtilFor(tempFilePath).getBom();
+            assertNull(bom);
         } finally {
             this.deleteTempFile(tempFilePath);
         }
@@ -256,9 +254,9 @@ public class EasyCSVMapTest {
         try {
             csvMap.saveToFile(tempFilePath);
 
-            //read file and check for BOM at the very beginning
-            CSVFile csvFile = FileUtil.loadFile(tempFilePath);
-            assertEquals(ByteOrderMark.UTF_8, csvFile.getBom());
+            // read file and check for BOM at the very beginning
+            ByteOrderMark bom = FileUtil.getFileUtilFor(tempFilePath).getBom();
+            assertEquals(ByteOrderMark.UTF_8, bom);
         } finally {
             this.deleteTempFile(tempFilePath);
         }
@@ -281,9 +279,9 @@ public class EasyCSVMapTest {
         try {
             csvMap.saveToFile(tempFilePath);
 
-            //read file and test on the special string
-            String csvFile = FileUtil.loadFile(tempFilePath).getContent();
-            String[] lines = csvFile.split(""+specialQuoteChar);
+            // read file and test on the special string
+            String csvFile = FileUtil.getFileUtilFor(tempFilePath).getContent();
+            String[] lines = csvFile.split("" + specialQuoteChar);
             assertEquals(37, lines.length);
 
 
