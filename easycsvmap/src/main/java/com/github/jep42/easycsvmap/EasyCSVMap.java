@@ -12,11 +12,14 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.io.ByteOrderMark;
+
 import com.github.jep42.easycsvmap.core.CSVContext;
 import com.github.jep42.easycsvmap.core.CSVMapException;
 import com.github.jep42.easycsvmap.csv.CSVFileFactory;
 import com.github.jep42.easycsvmap.csv.api.CSVFileReader;
 import com.github.jep42.easycsvmap.csv.api.CSVFileWriter;
+import com.github.jep42.easycsvmap.csv.io.CSVFile;
 import com.github.jep42.easycsvmap.selector.CSVSelectorFactory;
 import com.github.jep42.easycsvmap.selector.api.CSVSelector;
 import com.github.jep42.easycsvmap.util.CSVMapUtil;
@@ -30,6 +33,9 @@ public class EasyCSVMap {
     private static final String UNEXPECTED_EXCEPTION_MESSAGE = "An unexpected exception occured. See stacktrace for details about the root cause. message: %s";
 
     private CSVContext csvContext;
+
+    /** ByteOrderMark from parsed CSV file. Might be <code>NULL</code> if the file did not contain any BOM or if the object was not parsed from a file. */
+    private ByteOrderMark bom;
 
     private LinkedList<String> headerRow;
 
@@ -72,7 +78,11 @@ public class EasyCSVMap {
      */
     public List<Map<String, String>> parseCsvFromFile(String csvFilePath) {
         try {
-            return this.parseCsv(FileUtil.loadFile(csvFilePath));
+            CSVFile file = FileUtil.loadFile(csvFilePath);
+
+            this.bom = file.getBom();   // Store ByteOrderMark from input file so we can re-add it in the output file
+
+            return this.parseCsv(file.getContent());
         } catch (IOException e) {
             throw new CSVMapException(String.format(UNEXPECTED_EXCEPTION_MESSAGE, e.getMessage()), e);
         }
@@ -283,7 +293,7 @@ public class EasyCSVMap {
 
         CSVFileWriter writer = null;
         try {
-            writer = CSVFileFactory.getWriter(pathToCsv, this.csvContext.getColumnSeparator(), this.csvContext.getQuoteCharacter(), this.csvContext.getLineEnd());
+            writer = CSVFileFactory.getWriter(pathToCsv, bom, this.csvContext.getColumnSeparator(), this.csvContext.getQuoteCharacter(), this.csvContext.getLineEnd());
 
             Iterator<Map<String, String>> it = this.csvMap.iterator();
             while (it.hasNext()) {
