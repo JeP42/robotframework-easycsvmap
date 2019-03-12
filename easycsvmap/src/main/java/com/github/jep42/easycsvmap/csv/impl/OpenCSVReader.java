@@ -54,7 +54,9 @@ public class OpenCSVReader implements CSVFileReader {
     }
 
     @Override
-    public void resetReader() {
+    public void resetReader() throws IOException {
+        close();
+
         this.initializeReader();
     }
 

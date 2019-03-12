@@ -12,6 +12,6 @@ public interface CSVFileReader {
 
     ByteOrderMark getBom();
 
-    void resetReader();
+    void resetReader() throws IOException;
 
 }
