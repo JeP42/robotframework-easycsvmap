@@ -1,14 +1,17 @@
 package com.github.jep42.roboteasycsv;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
+import org.apache.commons.io.ByteOrderMark;
 import org.junit.Test;
 
+import com.github.jep42.easycsvmap.core.CSVContext;
 import com.github.jep42.easycsvmap.util.FileUtil;
 
 public class RobotEasyCsvTest {
@@ -23,7 +26,7 @@ public class RobotEasyCsvTest {
         easyCsv.parseCsvFromFile(1, csvFilePath1, 0);
         easyCsv.parseCsvFromFile(2, csvFilePath2, 0);
 
-        for (int i=1; i<=2; i++) {
+        for (int i = 1; i <= 2; i++) {
             List<String> allCsvValues = easyCsv.getAllCsvValues(i, "{*}.Col0-Header");
 
             assertEquals("Col0-Header", allCsvValues.get(0).toString());
@@ -52,7 +55,7 @@ public class RobotEasyCsvTest {
         this.assertValues(easyCsv, 2, "43");
     }
 
-     private void assertValues(RobotEasyCsv easyCsv, Integer sessionId, String value) {
+    private void assertValues(RobotEasyCsv easyCsv, Integer sessionId, String value) {
         List<String> allCsvValues = easyCsv.getAllCsvValues(sessionId, "{*}.Col0-Header");
 
         assertEquals("Col0-Header", allCsvValues.get(0).toString());
@@ -61,6 +64,34 @@ public class RobotEasyCsvTest {
         assertEquals(value, allCsvValues.get(3).toString());
         assertEquals(value, allCsvValues.get(4).toString());
         assertEquals(value, allCsvValues.get(5).toString());
+    }
+
+    private void assertBOM(String filePath, ByteOrderMark byteOrderMark) {
+        byte[] quoteCharacter = new byte[] { CSVContext.STANDARD_QUOTE_CHARACTER };
+
+        byte[] firstBytes;
+
+        if (byteOrderMark == null) {
+            firstBytes = quoteCharacter; // File without BOM should start with quote character
+        } else {
+            byte[] bom = byteOrderMark.getBytes();
+
+            firstBytes = new byte[bom.length + quoteCharacter.length]; // File should start with BOM followed by the
+                                                                       // first quote character
+
+            // Add the BOM bytes followed by the quote character
+            System.arraycopy(bom, 0, firstBytes, 0, bom.length);
+            System.arraycopy(quoteCharacter, 0, firstBytes, bom.length, quoteCharacter.length);
+        }
+
+        try {
+            String content = new String(Files.readAllBytes(Paths.get(filePath)));
+            String prefix = new String(firstBytes);
+
+            assertTrue(content.startsWith(prefix));
+        } catch (IOException ex) {
+            fail("Could not read temp file: " + ex.getMessage());
+        }
     }
 
     @Test
@@ -72,7 +103,8 @@ public class RobotEasyCsvTest {
         easyCsv.parseCsvFromFile(1, csvFilePath1, 0);
         easyCsv.parseCsvFromFile(2, csvFilePath2, 0);
 
-        // intention of this test is to verify the robot keyword, actually not the underlying CSVMap. Hence this easy test is sufficient...
+        // intention of this test is to verify the robot keyword, actually not the underlying CSVMap. Hence this easy
+        // test is sufficient...
         easyCsv.setCsvValues(1, "{1,2,3,4,5}.Col0-Header", "42");
         easyCsv.setCsvValues(2, "{1,2,3,4,5}.Col0-Header", "43");
 
@@ -89,6 +121,36 @@ public class RobotEasyCsvTest {
         }
     }
 
+    @Test
+    public void saveCsvToFile_KeepBOM() {
+        String csvFilePath1 = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines.csv");
+        String csvFilePath2 = FileUtil
+                .getSystemResourcePath("com/github/jep42/easycsvmap/header-0-five-lines_UTF-8_BOM.csv");
+
+        RobotEasyCsv easyCsv = new RobotEasyCsv();
+        easyCsv.parseCsvFromFile(1, csvFilePath1, 0);
+        easyCsv.parseCsvFromFile(2, csvFilePath2, 0);
+
+        // intention of this test is to verify the robot keyword, actually not the underlying CSVMap. Hence this easy
+        // test is sufficient...
+        easyCsv.setCsvValues(1, "{1,2,3,4,5}.Col0-Header", "42");
+        easyCsv.setCsvValues(2, "{1,2,3,4,5}.Col0-Header", "43");
+
+        String tempFilePath = this.createTempFile();
+        try {
+            easyCsv.saveCsvToFile(1, tempFilePath + "_1");
+            easyCsv.saveCsvToFile(2, tempFilePath + "_2");
+
+            this.assertValues(easyCsv, 1, "42");
+            this.assertValues(easyCsv, 2, "43");
+
+            this.assertBOM(tempFilePath + "_1", null);
+            this.assertBOM(tempFilePath + "_2", ByteOrderMark.UTF_8);
+        } finally {
+            this.deleteTempFile(tempFilePath + "_1");
+            this.deleteTempFile(tempFilePath + "_2");
+        }
+    }
 
     @Test
     public void specialLineEndSequenceProperlyConsidered() throws Exception {
@@ -103,15 +165,14 @@ public class RobotEasyCsvTest {
         try {
             easyCsv.saveCsvToFile(1, tempFilePath);
 
-            //read file and test on the special string
-            String csvFile = FileUtil.loadFile(tempFilePath);
+            // read file and test on the special string
+            String csvFile = FileUtil.getFileUtilFor(tempFilePath).getContent();
             String[] lines = csvFile.split(specialLineEndSequence);
             assertEquals(6, lines.length);
         } finally {
             this.deleteTempFile(tempFilePath);
         }
     }
-
 
     @Test
     public void getFirstCsvValue() {
@@ -122,7 +183,8 @@ public class RobotEasyCsvTest {
         easyCsv.parseCsvFromFile(1, csvFilePath1, 0);
         easyCsv.parseCsvFromFile(2, csvFilePath2, 0);
 
-        // intention of this test is to verify the robot keyword, actually not the underlying CSVMap. Hence this easy test is sufficient...
+        // intention of this test is to verify the robot keyword, actually not the underlying CSVMap. Hence this easy
+        // test is sufficient...
         String v1 = easyCsv.getFirstCsvValue(1, "{1}.Col0-Header");
         String v2 = easyCsv.getFirstCsvValue(2, "{1}.Col0-Header");
 
@@ -142,7 +204,8 @@ public class RobotEasyCsvTest {
         easyCsv.addRow(1, "Wendy", "Darling", "wendy@home.com");
         easyCsv.addRow(2, "Peter", "Pan", "pp@home.com");
 
-        // intention of this test is to verify the robot keyword, actually not the underlying CSVMap. Hence this easy test is sufficient...
+        // intention of this test is to verify the robot keyword, actually not the underlying CSVMap. Hence this easy
+        // test is sufficient...
         String v1 = easyCsv.getFirstCsvValue(1, "{6}.Col0-Header");
         String v2 = easyCsv.getFirstCsvValue(2, "{6}.Col0-Header");
 
@@ -165,11 +228,9 @@ public class RobotEasyCsvTest {
             easyCsv.addRow(2, "Peter", "Pan", "pp@home.com");
             fail("Seems the CSV session with ID 2 was not properly removed");
         } catch (RobotCsvException e) {
-            //nothing to do....this is expected
+            // nothing to do....this is expected
         }
     }
-
-
 
     @Test(expected = RobotCsvException.class)
     public void setCsvValues_NotInitializedDefaultInstance() {

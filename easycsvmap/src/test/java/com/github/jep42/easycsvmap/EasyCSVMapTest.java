@@ -1,11 +1,11 @@
 package com.github.jep42.easycsvmap;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Ignore;
+import org.apache.commons.io.ByteOrderMark;
 import org.junit.Test;
 
 import com.github.jep42.easycsvmap.core.CSVContext;
@@ -207,12 +207,56 @@ public class EasyCSVMapTest {
         try {
             csvMap.saveToFile(tempFilePath);
 
-            //read file and test on the special string
-            String csvFile = FileUtil.loadFile(tempFilePath);
+            // read file and test on the special string
+            String csvFile = FileUtil.getFileUtilFor(tempFilePath).getContent();
             String[] lines = csvFile.split(specialLineEnd);
             assertEquals(6, lines.length);
 
 
+        } finally {
+            this.deleteTempFile(tempFilePath);
+        }
+    }
+
+    @Test
+    public void saveToFile_NoByteOrderMark() throws Exception {
+        CSVContext csvContext = new CSVContext(-1);
+
+        EasyCSVMap csvMap = new EasyCSVMap(csvContext);
+        csvContext.setQuoteCharacter('"');
+
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/no-header-five-lines.csv");
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        String tempFilePath = this.createTempFile();
+        try {
+            csvMap.saveToFile(tempFilePath);
+
+            // read file and check for BOM at the very beginning
+            ByteOrderMark bom = FileUtil.getFileUtilFor(tempFilePath).getBom();
+            assertNull(bom);
+        } finally {
+            this.deleteTempFile(tempFilePath);
+        }
+    }
+
+    @Test
+    public void saveToFile_UTF8ByteOrderMark() throws Exception {
+        CSVContext csvContext = new CSVContext(-1);
+
+        EasyCSVMap csvMap = new EasyCSVMap(csvContext);
+        csvContext.setQuoteCharacter('"');
+
+        String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/no-header-five-lines_UTF-8_BOM.csv");
+        csvMap.parseCsvFromFile(csvFilePath);
+
+        String tempFilePath = this.createTempFile();
+        try {
+            csvMap.saveToFile(tempFilePath);
+
+            // read file and check for BOM at the very beginning
+            ByteOrderMark bom = FileUtil.getFileUtilFor(tempFilePath).getBom();
+            assertEquals(ByteOrderMark.UTF_8, bom);
         } finally {
             this.deleteTempFile(tempFilePath);
         }
@@ -235,9 +279,9 @@ public class EasyCSVMapTest {
         try {
             csvMap.saveToFile(tempFilePath);
 
-            //read file and test on the special string
-            String csvFile = FileUtil.loadFile(tempFilePath);
-            String[] lines = csvFile.split(""+specialQuoteChar);
+            // read file and test on the special string
+            String csvFile = FileUtil.getFileUtilFor(tempFilePath).getContent();
+            String[] lines = csvFile.split("" + specialQuoteChar);
             assertEquals(37, lines.length);
 
 
@@ -300,7 +344,6 @@ public class EasyCSVMapTest {
     }
 
     @Test
-    @Ignore
     public void parseCsv_utf8WithBom() {
         EasyCSVMap csvMap = new EasyCSVMap(0);
         String csvFilePath = FileUtil.getSystemResourcePath("com/github/jep42/easycsvmap/csv-in-utf8-with-bom.csv");

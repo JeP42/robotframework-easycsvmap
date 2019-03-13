@@ -1,5 +1,6 @@
 package com.github.jep42.easycsvmap;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,7 +21,6 @@ import com.github.jep42.easycsvmap.csv.api.CSVFileWriter;
 import com.github.jep42.easycsvmap.selector.CSVSelectorFactory;
 import com.github.jep42.easycsvmap.selector.api.CSVSelector;
 import com.github.jep42.easycsvmap.util.CSVMapUtil;
-import com.github.jep42.easycsvmap.util.FileUtil;
 
 /**
  * EasyCSVMap allows parsing CSV files and accessing elements via name and/or index.
@@ -34,6 +34,8 @@ public class EasyCSVMap {
     private LinkedList<String> headerRow;
 
     private List<Map<String, String>> csvMap = new ArrayList<>();
+
+    private CSVFileReader reader;
 
     /**
      * Creates EasyCSVMap object.
@@ -72,35 +74,38 @@ public class EasyCSVMap {
      */
     public List<Map<String, String>> parseCsvFromFile(String csvFilePath) {
         try {
-            return this.parseCsv(FileUtil.loadFile(csvFilePath));
+            this.reader = this.getReader(new File(csvFilePath));
+
+            return this.parseCsv();
+
         } catch (IOException e) {
             throw new CSVMapException(String.format(UNEXPECTED_EXCEPTION_MESSAGE, e.getMessage()), e);
+        } finally {
+            this.closeCSVReader(this.reader);
         }
     }
 
     /**
      * Parses the given CSV format
      *
-     * @param csvString CSV format as String
      * @return the parsed CSV
      */
-    public List<Map<String, String>> parseCsv(String csvString) {
+    public List<Map<String, String>> parseCsv() {
 
         // find the header row or create a pseudo header row
-        this.findHeaderRow(csvString);
+        this.findHeaderRow();
 
         // parse rows and put values into internal map
-        return this.processRows(csvString);
+        return this.processRows();
     }
 
-    private void findHeaderRow(String csvString) {
-        CSVFileReader reader = null;
+    private void findHeaderRow() {
         try {
-            reader = this.getReader(csvString);
             String[] nextRow;
             int rowIndex = 0;
-
-            while ((nextRow = reader.readNextLine()) != null) {
+            this.reader.resetReader();
+            
+            while ((nextRow = this.reader.readNextLine()) != null) {
                 if (this.processHeaderRow(nextRow, rowIndex++)) {
 
                     break;
@@ -110,8 +115,6 @@ public class EasyCSVMap {
             this.validateHeaderRow();
         } catch (IOException e) {
             throw new CSVMapException(String.format(UNEXPECTED_EXCEPTION_MESSAGE, e.getMessage()), e);
-        } finally {
-            this.closeCSVReader(reader);
         }
     }
 
@@ -132,8 +135,9 @@ public class EasyCSVMap {
         return this.headerRow.size() != colSet.size();
     }
 
-    private CSVFileReader getReader(String csvString) {
-        return CSVFileFactory.getReader(csvString, this.csvContext.getColumnSeparator(), this.csvContext.getQuoteCharacter());
+    private CSVFileReader getReader(File csvFile) throws IOException {
+        return CSVFileFactory.getReader(csvFile, this.csvContext.getColumnSeparator(),
+                this.csvContext.getQuoteCharacter());
     }
 
     private boolean processHeaderRow(String[] csvRow, int rowIndex) {
@@ -157,22 +161,19 @@ public class EasyCSVMap {
         return l;
     }
 
-    private List<Map<String, String>> processRows(String csvString) {
-        CSVFileReader reader = null;
+    private List<Map<String, String>> processRows() {
         try {
-            reader = this.getReader(csvString);
             String[] nextRow;
-            while ((nextRow = reader.readNextLine()) != null) {
-            	//don't mind about empty lines, ignore them silently...
-            	if (this.isEmptyLine(nextRow)) {
-            		continue;
-            	}
+            this.reader.resetReader();
+            while ((nextRow = this.reader.readNextLine()) != null) {
+                // don't mind about empty lines, ignore them silently...
+                if (this.isEmptyLine(nextRow)) {
+                    continue;
+                }
                 this.processDataRow(nextRow);
             }
         } catch (IOException e) {
             throw new CSVMapException(String.format(UNEXPECTED_EXCEPTION_MESSAGE, e.getMessage()), e);
-        } finally {
-            this.closeCSVReader(reader);
         }
 
         return this.csvMap;
@@ -283,7 +284,8 @@ public class EasyCSVMap {
 
         CSVFileWriter writer = null;
         try {
-            writer = CSVFileFactory.getWriter(pathToCsv, this.csvContext.getColumnSeparator(), this.csvContext.getQuoteCharacter(), this.csvContext.getLineEnd());
+            writer = CSVFileFactory.getWriter(pathToCsv, this.reader.getBom(), this.csvContext.getColumnSeparator(),
+                    this.csvContext.getQuoteCharacter(), this.csvContext.getLineEnd());
 
             Iterator<Map<String, String>> it = this.csvMap.iterator();
             while (it.hasNext()) {
