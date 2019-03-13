@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.github.jep42</groupId>
     <artifactId>easycsvmap-reactor</artifactId>
-    <version>0.0.5-SNAPSHOT</version>
+    <version>0.0.5</version>
   </parent>
 
     <build>
