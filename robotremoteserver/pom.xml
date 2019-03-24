@@ -22,6 +22,7 @@
       <plugin>
           <artifactId>maven-assembly-plugin</artifactId>
           <configuration>
+           <finalName>robotremoteserver-easycsvmap</finalName> 
             <archive>
               <manifest>
                 <mainClass>com.github.jep42.roboteasycsv.EasyCsvRobotRemoteServer</mainClass>
