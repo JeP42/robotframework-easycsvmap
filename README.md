@@ -2,7 +2,7 @@
 [![codecov](https://codecov.io/gh/JeP42/robotframework-easycsvmap/branch/master/graph/badge.svg)](https://codecov.io/gh/JeP42/robotframework-easycsvmap)
 [![Quality Gate](https://sonarcloud.io/api/badges/gate?key=com.github.jep42:easycsvmap-reactor)](https://sonarcloud.io/projects?search=com.github.jep42:easycsvmap-reactor)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.jep42/robotframework-easycsvmap/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.jep42/robotframework-easycsvmap)
-![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/jep42/robotremoteserver-easycsvmap.svg)
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/jep42/robotremoteserver-easycsvmap.svg)](https://hub.docker.com/r/jep42/robotremoteserver-easycsvmap)
 
 ## robotframework-easycsvmap
 
