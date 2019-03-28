@@ -33,11 +33,11 @@ public final class FileUtil {
     }
 
     private void initialize() throws IOException {
-        BOMInputStream input = new BOMInputStream(Files.newInputStream(Paths.get(this.filePath)));
-
-        // Fetch BOM (optional) and actual data from the InputStream
-        this.bom = input.getBOM();
-        this.content = IOUtils.toString(input, getCharSet(bom));
+        try (BOMInputStream input = new BOMInputStream(Files.newInputStream(Paths.get(this.filePath)))) {
+            // Fetch BOM (optional) and actual data from the InputStream
+            this.bom = input.getBOM();
+            this.content = IOUtils.toString(input, getCharSet(bom));
+        }
     }
 
     public String getContent() {
